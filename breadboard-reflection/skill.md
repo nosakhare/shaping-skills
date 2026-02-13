@@ -30,13 +30,17 @@ After Phase 1, the breadboard shows what IS, not what should be.
 
 ### Phase 2: REFLECT — Find and fix design smells
 
-Now that the breadboard is accurate, inspect it for design problems. The code's names might be wrong. The split of responsibilities might not be ideal. The wiring might reveal unnecessary coupling or missing abstractions.
+Phase 1 is preparation. Phase 2 is the point. Do not skip it.
 
-1. **Trace user stories through the wiring.** Does the path tell a coherent story?
-2. **Apply the naming test.** Can each affordance be named with one idiomatic verb?
-3. **Check the smells table.** Unexplained behavior, wrong causality, naming resistance, etc.
-4. **Fix smells.** Split, merge, rename, or rewire affordances. Update the breadboard.
-5. **Optionally update the code.** If the breadboard reveals a better design, refactor the implementation to match.
+Now that the breadboard is accurate, inspect it for design problems. The code's names might be wrong. The split of responsibilities might not be ideal. The wiring might reveal unnecessary coupling or missing abstractions. Walk through each of these concrete checks:
+
+1. **Trace user stories through the wiring.** Does the path tell a coherent story? Can you explain every behavior without hidden steps?
+2. **Run the naming test on every affordance.** For each node: who is the caller, what is the step-level effect, can you name it with one idiomatic verb? Flag any that resist naming. (See "The Naming Test" in Phase 2 details below.)
+3. **Check for hidden data stores.** For every module-level constant, config object, or template that an affordance reads: is it in the Data Stores table? If code reads it to produce effects, it's a store — even if it's static. Ask: "what does this affordance need to know in order to do its job?" If the answer references something not in the breadboard, it's missing.
+4. **Question the places.** For each place: does everything in it share a single responsibility? Do state and affordances within it co-access each other and stay isolated from other places? If a cluster of affordances, state, and UI elements all serve one job (e.g., "turn natural language into structured commands"), they might deserve their own place — even if the code doesn't separate them yet.
+5. **Check the smells table.** Unexplained behavior, incoherent wiring, naming resistance, etc.
+6. **Fix smells.** Split, merge, rename, or rewire affordances. Update the breadboard.
+7. **Optionally update the code.** If the breadboard reveals a better design, refactor the implementation to match.
 
 The loop: SEE what the code actually does → REFLECT on whether that design is right → fix the breadboard → optionally fix the code → repeat.
 
