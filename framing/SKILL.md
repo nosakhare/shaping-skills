@@ -51,6 +51,32 @@ Then make the case for the one to pursue now:
 
 **Outcome:** What success looks like. Also bullets. Stay high-level — this is not solution-specific.
 
+### 4. Less about / More about — Boundary on the solution space (optional)
+
+A guardrail that orients the reader toward what kind of solution fits and away from what kind doesn't. It sits after Problem/Outcome as a separate section. Same format — two symmetric bullet lists.
+
+**What it does:** Prevents someone from reading the Problem and Outcome correctly but proposing the wrong kind of solution. For example, a problem about getting programs into the system could reasonably lead someone to propose "AI that advises coaches on what to program" — which technically addresses the problem but completely misses the point.
+
+**When to include it:** When there's a common misunderstanding or an obvious-but-wrong direction that people could easily head toward. The signal is that people in the conversations are actively drawing a line — saying what this is NOT. If nobody felt the need to draw that line, you probably don't need the section.
+
+**How it surfaces:** This probably won't emerge mechanically from a first pass through the transcripts. It's more likely to surface during review — either the shaper notices a pattern of people saying "not about X," or someone reading the frame proposes something that fits the Problem/Outcome but misses the point. That's the moment where you realize the boundary needs to be made explicit.
+
+**What it looks like:**
+
+```markdown
+## Less about
+
+- [What this project is NOT trying to solve]
+- [The wrong direction people might naturally head toward]
+
+## More about
+
+- [What kind of solution actually fits]
+- [The real nature of the problem being addressed]
+```
+
+No quotes or attribution needed — it's a synthesis. Keep it to the key points.
+
 ---
 
 ## The Key Discipline: Evidence, Not Editorializing
@@ -142,6 +168,14 @@ shaping: true
 
 - [Bullet — high-level, not solution-specific]
 - [Bullet — high-level, not solution-specific]
+
+## Less about
+
+- [What this is not]
+
+## More about
+
+- [What this is]
 ```
 
 ---
