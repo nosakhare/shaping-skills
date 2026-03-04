@@ -1,5 +1,5 @@
 ---
-name: framing
+name: framing-doc
 description: Create a framing document from conversation transcripts. Use when the user has transcripts (VTT, call notes, etc.) and wants to produce a frame that captures the problem worth solving and why it was chosen over alternatives.
 ---
 
@@ -168,6 +168,8 @@ shaping: true
 
 - [Bullet — high-level, not solution-specific]
 - [Bullet — high-level, not solution-specific]
+
+---
 
 ## Less about
 
