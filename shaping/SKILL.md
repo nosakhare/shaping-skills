@@ -311,7 +311,7 @@ Avoid:
 Use the `/breadboarding` skill to map existing systems or detail an option into concrete screens and behavior. Breadboarding produces:
 - See-Do tables per screen (what users see and can do)
 - Behavior flows for complex logic (how things work underneath)
-- (Optional) Flow map diagram
+- (Optional) Journey diagram (PlantUML swimlanes)
 
 Invoke breadboarding when you need to:
 - Map existing code to understand where changes land
@@ -320,7 +320,7 @@ Invoke breadboarding when you need to:
 
 ### See-Do Tables Are the Source of Truth
 
-The See-Do tables (one per screen) define the breadboard. Behavior flows explain the logic behind complex actions. The Mermaid diagram is a visual aid.
+The See-Do tables (one per screen) define the breadboard. Behavior flows explain the logic behind complex actions. The journey diagram is a visual aid.
 
 When receiving feedback on a breadboard:
 1. **First** — update the See-Do tables (add/remove See items and Do actions)
@@ -449,7 +449,7 @@ Use "Detail X" (not a new letter) to show this is a breakdown of Option X, not a
 Use the `/breadboarding` skill to produce:
 - **See-Do tables** — Per screen: what users see (data, labels, status) and what they can do (buttons, inputs, links → destinations)
 - **Behavior flows** — Steps behind complex actions (API calls, data processing, multi-step logic)
-- **Flow map** — How screens connect to each other
+- **Journey diagram** — Full flow across all actors (PlantUML swimlanes)
 
 ### Why "Detail X" Not "C"
 
