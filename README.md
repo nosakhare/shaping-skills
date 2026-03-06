@@ -6,9 +6,9 @@
 
 ## Skills
 
-**`/shaping`** — Iterate on both the problem (requirements) and solution (shapes) before committing to implementation. Separates what you need from how you might build it, with fit checks to see what's solved and what isn't.
+**`/shaping`** — Iterate on both the problem (requirements) and solution (options) before committing to implementation. Separates what you need from how you might build it, with coverage checks to see what's solved and what isn't.
 
-**`/breadboarding`** — Map a system into UI affordances, code affordances, and wiring. Shows what users can do and how it works underneath — in one view. Good for slicing into vertical scopes.
+**`/breadboarding`** — Map a system screen by screen — what users see, what they can do, and how it works underneath. Uses See-Do tables for the interface and behavior flows for the logic. Good for slicing into vertical scopes.
 
 ## Install
 
@@ -21,9 +21,39 @@ ln -s ~/.local/share/shaping-skills/shaping ~/.claude/skills/shaping
 
 Each skill must be a direct child of `~/.claude/skills/` so Claude Code can discover it. Symlinks keep them updatable with `git pull`.
 
+## Codex
+
+To use these as Codex skills, symlink them into `~/.codex/skills/`:
+
+```bash
+mkdir -p ~/.codex/skills
+ln -s "$(pwd)/shaping" ~/.codex/skills/shaping
+ln -s "$(pwd)/breadboarding" ~/.codex/skills/breadboarding
+```
+
+## Cursor
+
+To use these skills as **global Cursor Agent Skills** (available in all projects), put them under `~/.cursor/skills/`. Copy or symlink from the repo root:
+
+```bash
+mkdir -p ~/.cursor/skills
+
+# Option A: copy (Cursor has its own copy; re-copy after upstream changes)
+cp -r shaping ~/.cursor/skills/shaping
+cp -r breadboarding ~/.cursor/skills/breadboarding
+cp breadboarding/skill.md ~/.cursor/skills/breadboarding/SKILL.md   # Cursor expects SKILL.md
+
+# Option B: symlink (single source of truth; git pull updates Cursor)
+ln -sf "$(pwd)/shaping" ~/.cursor/skills/shaping
+ln -s "$(pwd)/breadboarding" ~/.cursor/skills/breadboarding
+cp breadboarding/skill.md ~/.cursor/skills/breadboarding/SKILL.md   # Cursor expects SKILL.md
+```
+
+The ripple-check hook below is Claude-specific and is not used by Cursor.
+
 ## Hook: Ripple Check
 
-The repo includes a hook that reminds Claude to check for ripple effects when editing shaping documents. When Claude writes or edits a `.md` file with `shaping: true` in its frontmatter, the hook prompts a checklist — update affordance tables, fit checks, work streams, etc.
+The repo includes a hook that reminds Claude to check for ripple effects when editing shaping documents. When Claude writes or edits a `.md` file with `shaping: true` in its frontmatter, the hook prompts a checklist — update element tables, coverage checks, work streams, etc.
 
 ### Setup
 
