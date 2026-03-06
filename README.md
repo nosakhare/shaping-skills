@@ -48,6 +48,7 @@ To use these as Codex skills, symlink them into `~/.codex/skills/`:
 mkdir -p ~/.codex/skills
 ln -s "$(pwd)/shaping" ~/.codex/skills/shaping
 ln -s "$(pwd)/breadboarding" ~/.codex/skills/breadboarding
+ln -s "$(pwd)/breadboard-reflection" ~/.codex/skills/breadboard-reflection
 ```
 
 ## Cursor
@@ -61,11 +62,15 @@ mkdir -p ~/.cursor/skills
 cp -r shaping ~/.cursor/skills/shaping
 cp -r breadboarding ~/.cursor/skills/breadboarding
 cp breadboarding/skill.md ~/.cursor/skills/breadboarding/SKILL.md   # Cursor expects SKILL.md
+cp -r breadboard-reflection ~/.cursor/skills/breadboard-reflection
+cp breadboard-reflection/skill.md ~/.cursor/skills/breadboard-reflection/SKILL.md
 
 # Option B: symlink (single source of truth; git pull updates Cursor)
 ln -sf "$(pwd)/shaping" ~/.cursor/skills/shaping
 ln -s "$(pwd)/breadboarding" ~/.cursor/skills/breadboarding
 cp breadboarding/skill.md ~/.cursor/skills/breadboarding/SKILL.md   # Cursor expects SKILL.md
+ln -s "$(pwd)/breadboard-reflection" ~/.cursor/skills/breadboard-reflection
+cp breadboard-reflection/skill.md ~/.cursor/skills/breadboard-reflection/SKILL.md
 ```
 
 The ripple-check hook below is Claude-specific and is not used by Cursor.
