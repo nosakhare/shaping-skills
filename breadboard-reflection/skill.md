@@ -1,14 +1,5 @@
 # Breadboard Analysis
 
-<<<<<<< HEAD
-Find problems in a breadboard and fix them. Works on breadboards built with the breadboarding skill.
-
----
-
-## Finding Problems
-
-### Entry Point: Trace User Stories Through the Flow
-=======
 Reflect on a breadboard by syncing it to the implementation, then finding and fixing design smells. Works on existing breadboards built with the `/breadboarding` skill.
 
 ---
@@ -94,7 +85,6 @@ Do NOT fix design problems yet. The goal of Phase 1 is an accurate picture, even
 Now the breadboard is accurate. The code's names might be wrong, the split of responsibilities might not be ideal, the wiring might reveal unnecessary coupling. This is where you judge the design.
 
 ### Trace User Stories Through the Wiring
->>>>>>> 7d8c311929de0dde6e47bd75c4f4b34634eded0c
 
 Take a user story from the requirements. Trace it through the See-Do tables and behavior flows. Ask: does the path make sense? Does it produce the expected result?
 
@@ -106,19 +96,6 @@ At each step, ask: does this logically lead to the next? Is anything missing?
 
 ### What Problems Look Like
 
-<<<<<<< HEAD
-| Problem | What you notice |
-|---------|----------------|
-| **Missing path** | A user story requires something to happen, but no Do action or behavior flow produces it |
-| **Disconnected See items** | A See item shows data, but nothing in the behavior flows produces that data |
-| **Dead-end Do actions** | A Do action doesn't point to a screen or behavior flow |
-| **Naming resistance** | You can't name a behavior step with one plain verb (see Naming Test below) |
-| **Stale elements** | The breadboard shows something that no longer exists in the code |
-| **Wrong causality** | The behavior flow says A calls B, but the code shows C calls B |
-| **Missing logic** | The code has paths or functions not represented in the behavior flows |
-
-The first three are visible from the breadboard alone. The last four require comparing to the code.
-=======
 | Smell | What you notice |
 |-------|-----------------|
 | **Unexplained behavior** | You know the system does something (transforms data, makes decisions) but the breadboard doesn't show how — the explanation is missing |
@@ -130,17 +107,10 @@ The first three are visible from the breadboard alone. The last four require com
 | **Wrong causality** | The wiring shows A calls B, but the code shows C calls B — should have been caught in Phase 1 |
 
 The first five are design smells — the code works but the design could be better. The last two are accuracy problems that Phase 1 should have caught; if you find them here, go back to Phase 1.
->>>>>>> 7d8c311929de0dde6e47bd75c4f4b34634eded0c
 
 ### Fixing Smells
 
-<<<<<<< HEAD
-## Fixing Problems
-
-### The Naming Test
-=======
 #### The Naming Test
->>>>>>> 7d8c311929de0dde6e47bd75c4f4b34634eded0c
 
 The main tool for finding and fixing boundary problems in behavior flows.
 
@@ -199,11 +169,7 @@ A function `resolve_locale` either pops an existing locale from a list OR create
 
 The inability to find one natural verb was the signal that two distinct operations were forced into one step.
 
-<<<<<<< HEAD
-### Splitting Steps
-=======
 #### Splitting Affordances
->>>>>>> 7d8c311929de0dde6e47bd75c4f4b34634eded0c
 
 When the naming test reveals a bundled step:
 
@@ -213,11 +179,7 @@ When the naming test reveals a bundled step:
 
 Never split only in a diagram (adding unnamed sub-nodes). If it's not a named function in the code and a step in the behavior flow, it's not real.
 
-<<<<<<< HEAD
-### Fixing Connections
-=======
 #### Fixing Wiring
->>>>>>> 7d8c311929de0dde6e47bd75c4f4b34634eded0c
 
 When the behavior flow doesn't match the code:
 

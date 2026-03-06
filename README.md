@@ -6,9 +6,6 @@
 
 ## Skills
 
-<<<<<<< HEAD
-**`/shaping`** — Iterate on both the problem (requirements) and solution (options) before committing to implementation. Separates what you need from how you might build it, with coverage checks to see what's solved and what isn't.
-=======
 ### Document skills — for collaborative work
 
 These turn transcripts of real conversations into structured shaping documents. They're useful on real production projects where you're working with other people and want to capture what was said in a format you can act on.
@@ -23,8 +20,7 @@ These turn transcripts of real conversations into structured shaping documents. 
 
 These are for working with Claude directly on shaping and design. They're more experimental and less battle-tested than the document skills.
 
-**`/shaping`** — Iterate on both the problem (requirements) and solution (shapes) before committing to implementation. Separates what you need from how you might build it, with fit checks to see what's solved and what isn't.
->>>>>>> 7d8c311929de0dde6e47bd75c4f4b34634eded0c
+**`/shaping`** — Iterate on both the problem (requirements) and solution (options) before committing to implementation. Separates what you need from how you might build it, with coverage checks to see what's solved and what isn't.
 
 **`/breadboarding`** — Map a system screen by screen — what users see, what they can do, and how it works underneath. Uses See-Do tables for the interface and behavior flows for the logic. Good for slicing into vertical scopes.
 
