@@ -22,7 +22,9 @@ These are for working with Claude directly on shaping and design. They're more e
 
 **`/shaping`** — Iterate on both the problem (requirements) and solution (options) before committing to implementation. Separates what you need from how you might build it, with coverage checks to see what's solved and what isn't.
 
-**`/breadboarding`** — Map a system screen by screen — what users see, what they can do, and how it works underneath. Uses See-Do tables for the interface and behavior flows for the logic. Good for slicing into vertical scopes.
+**`/breadboarding`** — Map a system screen by screen — what users see, what they can do, and how it works underneath. Uses See-Do tables for the interface, behavior flows for the logic, and an optional PlantUML journey diagram for the full picture across actors. Good for slicing into vertical scopes.
+
+**`/breadboard-reflection`** — Reflect on an existing breadboard by syncing it to the implementation, then finding and fixing design problems. Two-phase: first make the breadboard accurate (code is ground truth), then judge the design.
 
 ## Install
 
@@ -32,6 +34,7 @@ git clone https://github.com/rjs/shaping-skills.git ~/.local/share/shaping-skill
 ln -s ~/.local/share/shaping-skills/framing-doc ~/.claude/skills/framing-doc
 ln -s ~/.local/share/shaping-skills/kickoff-doc ~/.claude/skills/kickoff-doc
 ln -s ~/.local/share/shaping-skills/breadboarding ~/.claude/skills/breadboarding
+ln -s ~/.local/share/shaping-skills/breadboard-reflection ~/.claude/skills/breadboard-reflection
 ln -s ~/.local/share/shaping-skills/shaping ~/.claude/skills/shaping
 ```
 
