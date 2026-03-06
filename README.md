@@ -30,7 +30,7 @@ These are for working with Claude directly on shaping and design. They're more e
 
 ```bash
 # Clone the repo, then symlink each skill into your Claude Code skills directory
-git clone https://github.com/rjs/shaping-skills.git ~/.local/share/shaping-skills
+git clone https://github.com/nosakhare/shaping-skills.git ~/.local/share/shaping-skills
 ln -s ~/.local/share/shaping-skills/framing-doc ~/.claude/skills/framing-doc
 ln -s ~/.local/share/shaping-skills/kickoff-doc ~/.claude/skills/kickoff-doc
 ln -s ~/.local/share/shaping-skills/breadboarding ~/.claude/skills/breadboarding
