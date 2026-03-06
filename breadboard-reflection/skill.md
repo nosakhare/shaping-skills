@@ -1,5 +1,6 @@
 # Breadboard Analysis
 
+<<<<<<< HEAD
 Find problems in a breadboard and fix them. Works on breadboards built with the breadboarding skill.
 
 ---
@@ -7,6 +8,93 @@ Find problems in a breadboard and fix them. Works on breadboards built with the 
 ## Finding Problems
 
 ### Entry Point: Trace User Stories Through the Flow
+=======
+Reflect on a breadboard by syncing it to the implementation, then finding and fixing design smells. Works on existing breadboards built with the `/breadboarding` skill.
+
+---
+
+## What a Breadboard Is
+
+A breadboard should be a legible explanation of how the system produces its effects. When you look at it, you should be able to account for every behavior — not just see that an effect happens, but understand *how* it happens through the wiring.
+
+When someone's mental model of how the system behaves doesn't match what the breadboard shows, either their model is wrong or the breadboard is incomplete. A smell is that gap — you expect to see work being done (data transformed, decisions made, state managed) and the breadboard doesn't show it. Each question that probes the gap ("what generates this data?", "where is this defined?", "who calls this?") is testing the mental model against the artifact.
+
+The breadboard is complete when it can explain every behavior without hidden steps.
+
+---
+
+## Core Checklist
+
+Reflection is a two-phase loop: **SEE, then REFLECT.** Always in this order.
+
+### Phase 1: SEE — Sync breadboard to the implementation
+
+The code is ground truth. The breadboard may have drifted or been built from a conceptual shape that doesn't match what was actually implemented. Before looking for design problems, make the breadboard accurate.
+
+1. **Read the implementation code.** Find the relevant source files. Don't rely on the breadboard's current description of what the code does.
+2. **Inspect the seams.** Walk the code using the checklist in "Reading Seams from the Implementation" below — module boundaries, module-level definitions, function signatures, full call chains, decorators, state co-access.
+3. **Update the breadboard to match.** Add missing nodes, stores, and places. Fix wrong wiring. Remove stale affordances. The goal is: the breadboard now accurately reflects the code's actual structure — even if that structure has problems.
+
+After Phase 1, the breadboard shows what IS, not what should be.
+
+### Phase 2: REFLECT — Find and fix design smells
+
+Phase 1 is preparation. Phase 2 is the point. Do not skip it.
+
+Now that the breadboard is accurate, inspect it for design problems. The code's names might be wrong. The split of responsibilities might not be ideal. The wiring might reveal unnecessary coupling or missing abstractions. Walk through each of these concrete checks:
+
+1. **Trace user stories through the wiring.** Does the path tell a coherent story? Can you explain every behavior without hidden steps?
+2. **Run the naming test on every affordance.** For each node: who is the caller, what is the step-level effect, can you name it with one idiomatic verb? Flag any that resist naming. (See "The Naming Test" in Phase 2 details below.)
+3. **Check for hidden data stores.** For every module-level constant, config object, or template that an affordance reads: is it in the Data Stores table? If code reads it to produce effects, it's a store — even if it's static. Ask: "what does this affordance need to know in order to do its job?" If the answer references something not in the breadboard, it's missing.
+4. **Question the places.** For each place: does everything in it share a single responsibility? Do state and affordances within it co-access each other and stay isolated from other places? If a cluster of affordances, state, and UI elements all serve one job (e.g., "turn natural language into structured commands"), they might deserve their own place — even if the code doesn't separate them yet.
+5. **Check the smells table.** Unexplained behavior, incoherent wiring, naming resistance, etc.
+6. **Fix smells.** Split, merge, rename, or rewire affordances. Update the breadboard.
+7. **Optionally update the code.** If the breadboard reveals a better design, refactor the implementation to match.
+
+The loop: SEE what the code actually does → REFLECT on whether that design is right → fix the breadboard → optionally fix the code → repeat.
+
+---
+
+## Phase 1: SEE — Read Seams from the Implementation
+
+The code is ground truth. Read it before judging the breadboard.
+
+### What to Look For
+
+**1. Module boundaries are seams.** Each file or module is a boundary the code has already chosen. Check what crosses it — that's a public interface, and the breadboard should show it. If a module exists (e.g., `llm.py` separate from `app.py`), the breadboard shouldn't reach through it to grab internals. The module's public function is the affordance; what it calls internally is behind the boundary.
+
+**2. Module-level definitions are data stores.** Constants, configurations, and templates at the top of a module — `TOOLS`, `SYSTEM_PROMPT`, `DEFAULTS` — are static state that shapes behavior. If code reads them to produce effects, they belong in the breadboard as stores. They're easy to miss because they don't change at runtime, but they define what the system can do.
+
+**3. Function signatures are contracts.** The types tell you what data flows across boundaries. When a function's return type differs from what its downstream dependency returns (e.g., `send_command` returns `list[dict]` but `ollama.chat` returns a Response object), there's a transformation happening. That transformation is work the breadboard should account for. Name it.
+
+**4. Trace the full call chain, not just endpoints.** Don't jump from the UI event to the external service to the executor. Walk every function in the chain. Each one exists for a reason — orchestration, state management, data transformation, error handling. The ones that do real work (not just forwarding) are affordances. Skipping intermediate functions because they look like "glue" hides the explanation.
+
+**5. Decorators and patterns signal architectural roles.** `@work(thread=True)` means background worker. `try/except` wrappers mean error boundary. `async` means concurrency management. These aren't just implementation details — they tell you a function has a specific role in the system's architecture. An event handler that delegates to a `@work` function is two distinct things: a trigger and an orchestrator.
+
+**6. State that co-accesses suggests places.** Which functions and state are used together but don't touch other parts of the system? If `loading`, `TOOLS`, and `SYSTEM_PROMPT` are all accessed by the command input flow and never by the table display, they cluster into a candidate place. Places emerge from co-access patterns, not just from UI layout.
+
+### The Underlying Principle
+
+A breadboard designed from a conceptual shape ("user types, LLM processes, app executes") will be a flat pipeline. The code is more specific — it has already decided where the seams are through module splits, function extractions, and static configuration. When a breadboard exists alongside code, read the code's seams and check that the breadboard accounts for them. Not every function needs a node, but every module boundary, every data transformation, and every piece of static configuration that shapes behavior should show up somewhere.
+
+### Updating the Breadboard
+
+After inspecting the code, update the breadboard to match what IS:
+- Add missing nodes for functions the breadboard skipped
+- Add missing stores for constants and configuration the breadboard ignored
+- Fix wiring to match actual call chains
+- Add or restructure places based on state co-access
+
+Do NOT fix design problems yet. The goal of Phase 1 is an accurate picture, even if the design has issues.
+
+---
+
+## Phase 2: REFLECT — Find and Fix Design Smells
+
+Now the breadboard is accurate. The code's names might be wrong, the split of responsibilities might not be ideal, the wiring might reveal unnecessary coupling. This is where you judge the design.
+
+### Trace User Stories Through the Wiring
+>>>>>>> 7d8c311929de0dde6e47bd75c4f4b34634eded0c
 
 Take a user story from the requirements. Trace it through the See-Do tables and behavior flows. Ask: does the path make sense? Does it produce the expected result?
 
@@ -18,6 +106,7 @@ At each step, ask: does this logically lead to the next? Is anything missing?
 
 ### What Problems Look Like
 
+<<<<<<< HEAD
 | Problem | What you notice |
 |---------|----------------|
 | **Missing path** | A user story requires something to happen, but no Do action or behavior flow produces it |
@@ -29,12 +118,29 @@ At each step, ask: does this logically lead to the next? Is anything missing?
 | **Missing logic** | The code has paths or functions not represented in the behavior flows |
 
 The first three are visible from the breadboard alone. The last four require comparing to the code.
+=======
+| Smell | What you notice |
+|-------|-----------------|
+| **Unexplained behavior** | You know the system does something (transforms data, makes decisions) but the breadboard doesn't show how — the explanation is missing |
+| **Incoherent wiring** | A node writes to S1 AND triggers the thing that writes to S1 — redundant or contradictory |
+| **Missing path** | The user story requires an effect, but no wiring path produces it |
+| **Diagram-only nodes** | Nodes in the diagram that aren't in the affordance tables — decoration, not real affordances |
+| **Naming resistance** | You can't name an affordance with one idiomatic verb (see Naming Test below) |
+| **Stale affordances** | The breadboard shows something that no longer exists in the code — should have been caught in Phase 1 |
+| **Wrong causality** | The wiring shows A calls B, but the code shows C calls B — should have been caught in Phase 1 |
 
----
+The first five are design smells — the code works but the design could be better. The last two are accuracy problems that Phase 1 should have caught; if you find them here, go back to Phase 1.
+>>>>>>> 7d8c311929de0dde6e47bd75c4f4b34634eded0c
 
+### Fixing Smells
+
+<<<<<<< HEAD
 ## Fixing Problems
 
 ### The Naming Test
+=======
+#### The Naming Test
+>>>>>>> 7d8c311929de0dde6e47bd75c4f4b34634eded0c
 
 The main tool for finding and fixing boundary problems in behavior flows.
 
@@ -93,7 +199,11 @@ A function `resolve_locale` either pops an existing locale from a list OR create
 
 The inability to find one natural verb was the signal that two distinct operations were forced into one step.
 
+<<<<<<< HEAD
 ### Splitting Steps
+=======
+#### Splitting Affordances
+>>>>>>> 7d8c311929de0dde6e47bd75c4f4b34634eded0c
 
 When the naming test reveals a bundled step:
 
@@ -103,7 +213,11 @@ When the naming test reveals a bundled step:
 
 Never split only in a diagram (adding unnamed sub-nodes). If it's not a named function in the code and a step in the behavior flow, it's not real.
 
+<<<<<<< HEAD
 ### Fixing Connections
+=======
+#### Fixing Wiring
+>>>>>>> 7d8c311929de0dde6e47bd75c4f4b34634eded0c
 
 When the behavior flow doesn't match the code:
 
