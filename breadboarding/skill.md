@@ -309,40 +309,83 @@ If behavior flows write and read shared state, list the stores:
 | transferState | Amount, recipient, note | Passed between screens |
 | recentRecipients | Last 5 recipients | Transfer Screen (recent list) |
 
-### Optional: Flow Map (Mermaid)
+### Optional: Journey Diagram (PlantUML)
 
-A simple diagram showing how screens connect:
+A swimlane activity diagram showing the full journey — who does what, in what order, and where decisions branch. Use this when the flow crosses multiple actors (user, UI, backend, services) and the path through them matters.
 
-```mermaid
-flowchart LR
-    P1["Transfer Screen"] -->|send| P2["PIN Entry"]
-    P2 -->|confirm| P3["Success Screen"]
-    P2 -->|cancel| P1
-    P3 -->|done| P4["Account Dashboard"]
-    P3 -->|another| P1
+The See-Do tables give per-screen detail. The journey diagram gives the holistic view: the shape of the whole flow at once.
+
+```plantuml
+@startuml
+|User|
+start
+:Open Transfer screen;
+
+|Transfer UI|
+:Load balance and\nrecent recipients;
+
+|User|
+:Select recipient,\nenter amount,\nadd optional note;
+:Tap "Send";
+
+|Transfer UI|
+:Validate form;
+
+if (Valid?) then (yes)
+  :Show Amount Confirmation;
+
+  |User|
+  :Review details;
+  :Tap "Confirm";
+
+  |Transfer UI|
+  :Show PIN Entry;
+
+  |User|
+  :Enter PIN;
+  :Tap "Confirm";
+
+  |Transfer UI|
+  :POST /transfers\n(amount, recipient, PIN);
+
+  |Banking API|
+  :Validate PIN;
+  :Check balance;
+
+  if (Approved?) then (yes)
+    :Process transfer;
+    :Return transaction ref;
+
+    |Transfer UI|
+    :Navigate to Success screen;
+
+    |Notification Service|
+    :Send confirmation email;
+
+    |User|
+    :See success +\nreference number;
+    stop
+
+  else (no)
+    |Transfer UI|
+    :Show error on PIN Entry;
+
+    |User|
+    :Retry or cancel;
+  endif
+
+else (no)
+  |Transfer UI|
+  :Highlight invalid fields;
+
+  |User|
+  :Correct and retry;
+endif
+
+@enduml
 ```
 
-For complex systems, you can add behavior-level detail to the diagram. But the See-Do tables are the primary artifact — the diagram is a visual aid.
-
-#### Mermaid Conventions
-
-| Line Style | Meaning | Syntax |
-|------------|---------|--------|
-| Solid arrow | Action or trigger | `A -->|action| B` |
-| Dashed arrow | Data flow | `A -.->|data| B` |
-
-| Element | Color |
-|---------|-------|
-| Screens | Pink `#ffb6c1` |
-| Systems | Light teal `#e0f2f1` |
-| Behaviors | Grey `#d3d3d3` |
-| Data stores | Lavender `#e6e6fa` |
-
-```
-classDef ui fill:#ffb6c1,stroke:#d87093,color:#000
-classDef nonui fill:#d3d3d3,stroke:#808080,color:#000
-classDef store fill:#e6e6fa,stroke:#9370db,color:#000
-```
+The See-Do tables are the primary artifact. The journey diagram is a visual aid — use it when the full flow is hard to see by reading tables alone.
 
 ---
 
