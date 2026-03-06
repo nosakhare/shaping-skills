@@ -32,7 +32,7 @@ A kickoff transcript is sequential — people talk through things in the order t
 
 ## Structure
 
-### 1. Frame
+### 1. Context
 
 The strategic context and boundary conditions. This is NOT fluff — the builder needs this to make judgment calls when they hit ambiguity. Include:
 
@@ -97,7 +97,7 @@ If a decision only matters when building one specific area, it belongs in that a
 
 1. **Read the full transcript.** Don't start writing after reading part of it.
 2. **Identify the areas of the system** that were discussed — these become your sections.
-3. **Draft the Frame** from the framing/outcomes discussion (usually near the start of the call).
+3. **Draft the Context** from the framing/outcomes discussion (usually near the start of the call).
 4. **Write each territory section**, pulling from wherever in the transcript that area was discussed. A single section may draw from moments scattered across the whole call.
 5. **Place design decisions inline** in the section they belong to.
 6. **List the build sequence** at the end if slices were discussed (usually near the end of the call).
