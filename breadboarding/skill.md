@@ -162,13 +162,13 @@ When a screen contains distinct widgets or sections, you can either:
 
 For reusable widgets that appear on multiple screens, define the widget once and reference it: "This screen includes the **Letter Browser** widget (see Letter Browser below)."
 
-### Systems
+### Backends
 
-A system is a backend boundary — an API, database, worker, or service. Users never "visit" a system. Systems have logic and data but no See column.
+A backend is a backend boundary — an API, database, worker, or service. Users never "visit" a backend. Backends have logic and data but no See column.
 
 Examples: Payment API, Search Backend, Notification Worker.
 
-If something has user-visible elements, it's a screen. If it only has logic and data, it's a system. If you find yourself writing a See-Do table for an API, stop — that's a system.
+If something has user-visible elements, it's a screen. If it only has logic and data, it's a backend. If you find yourself writing a See-Do table for an API, stop — that's a backend.
 
 ### The See-Do Format
 
@@ -291,11 +291,11 @@ For Do items that reference a named flow (backtick names), describe the steps:
 3. On success: return transaction reference → navigate to **Success Screen**
 4. On failure: show error message on **PIN Entry**
 
-### When Needed: Systems
+### When Needed: Backends
 
 If the flow crosses backend boundaries, list them:
 
-| System | What it does |
+| Backend | What it does |
 |--------|-------------|
 | Banking API | Processes transfers, validates PINs |
 | Notification Service | Sends transfer confirmation emails |
@@ -515,9 +515,14 @@ A behavior flow should describe meaningful steps, not every line of code. Skip t
 
 Focus on what matters: what gets called, what data moves, what changes.
 
-### Backend Is a System, Not a Screen
+### Screens vs Backends
 
-Users never "visit" the backend. If something has user-visible elements, it's a screen. If it only has logic and data, it's a system. Describe systems in behavior flows, not in See-Do tables.
+A screen is where the user is — something with user-visible elements. A backend is a boundary with logic and data but no UI. Users never "visit" a backend.
+
+- Has visible elements? → It's a screen
+- Only logic and data? → It's a backend
+
+Describe backends in behavior flows, not in See-Do tables.
 
 ### Place Data Stores Where They're Read
 
@@ -635,7 +640,7 @@ After creating or changing a breadboard, check these:
 | Term | What it means |
 |------|--------------|
 | **Screen** | Where the user currently is (passes the blocking test) |
-| **System** | Backend boundary — API, database, worker (no user-facing elements) |
+| **Backend** | Backend boundary — API, database, worker (no user-facing elements) |
 | **See** | Everything visible on a screen (static content, data) |
 | **Do** | Everything interactive (buttons, inputs, links) → points to destination |
 | **Behavior flow** | Steps that explain complex logic behind a Do action |
@@ -704,9 +709,9 @@ Workflow to understand: "How is `admin_organisation_countries` modified and read
 | For each: home center country missing? | Checks assignment | organisations, admin_organisation_countries |
 | If missing: add country | Same as auto-assign | → writes admin_organisation_countries |
 
-**Systems**
+**Backends**
 
-| System | What it does |
+| Backend | What it does |
 |--------|-------------|
 | SSO Database | Stores role_profiles, admin_organisation_countries, organisations |
 | sso-dwbn-theme | Handles auto-assignment logic (signal handler + batch job) |
@@ -880,9 +885,9 @@ The app already has a global search page that handles most of these requirements
 2. `initializeState()` sets search query from URL
 3. Triggers `search` flow with restored query
 
-**Systems**
+**Backends**
 
-| System | What it does |
+| Backend | What it does |
 |--------|-------------|
 | Typesense | Search backend — handles `rawSearch()` calls |
 
