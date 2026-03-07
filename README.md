@@ -1,6 +1,6 @@
 # Shaping Skills
 
-[Claude Code](https://claude.com/claude-code) skills for shaping and breadboarding — the methodology from [Shape Up](https://basecamp.com/shapeup) adapted for working with an LLM.
+My personalization of [rjs/shaping-skills](https://github.com/rjs/shaping-skills) — [Claude Code](https://claude.com/claude-code) skills for shaping and breadboarding, based on the methodology from [Shape Up](https://basecamp.com/shapeup). I've extended the original with `/breadboard-reflection` and refined the other skills to better fit how I work.
 
 **Case study:** [Shaping 0-1 with Claude Code](https://x.com/rjs/status/2020184079350563263) walks through the full process of building a project from scratch using these skills. The source for that project is at [rjs/tick](https://github.com/rjs/tick).
 
@@ -12,19 +12,19 @@ These turn transcripts of real conversations into structured shaping documents. 
 
 **These are extremely GIGO (garbage in, garbage out).** They don't evaluate whether the material makes sense or is reasonable. They format and distill — that's it. When your inputs are good conversations with good thinking, they save a ton of time. When your inputs are bad, you get a nicely formatted bad document.
 
-**`/framing-doc`** — Turn conversation transcripts into a framing document that captures the problem worth solving and why it was chosen over alternatives.
+**`/framing-doc`** — Turn conversation transcripts into a framing document structured as Source → Pre-work → Problem → Outcome. Enforces evidence-based reasoning: every claim in Problem/Outcome must trace back to a verbatim source quote. Does not shape solutions — only captures the "why."
 
-**`/kickoff-doc`** — Turn a shaped project kickoff transcript into a reference document for the builder, capturing what was shaped and agreed.
+**`/kickoff-doc`** — Turn a shaped project kickoff transcript into a reference document for the builder. Organizes by territory (the thing being built), not by timeline (how the conversation went). Design decisions go inline with the areas they affect, not in a separate list. Captures Context, Territory, and Build Sequence.
 
 ### Solo skills — more experimental
 
 These are for working with Claude directly on shaping and design. They're more experimental and less battle-tested than the document skills.
 
-**`/shaping`** — Iterate on both the problem (requirements) and solution (options) before committing to implementation. Separates what you need from how you might build it, with coverage checks to see what's solved and what isn't.
+**`/shaping`** — Iterate on problem (requirements) and solution (options) simultaneously before committing to implementation. Uses R/S notation: R0, R1… for requirements; A, B, C for mutually exclusive options; A1, A2 for components of an option. Includes a coverage check (decision matrix) to see what's solved and what isn't, spike methodology for investigating unknowns, and multi-level consistency — changes propagate across shaping doc → slices doc → slice plans.
 
-**`/breadboarding`** — Map a system screen by screen — what users see, what they can do, and how it works underneath. Uses See-Do tables for the interface, behavior flows for the logic, and an optional PlantUML journey diagram for the full picture across actors. Good for slicing into vertical scopes.
+**`/breadboarding`** — Map a system screen by screen — dual-purpose: works for mapping existing systems or designing from shaped parts. Produces See-Do tables (what users see and can do per screen), behavior flows (steps explaining complex actions), and an optional PlantUML journey diagram. Uses plain language and real names, not abstractions. Includes explicit slicing guidance for breaking flows into vertical, demo-able scopes.
 
-**`/breadboard-reflection`** — Reflect on an existing breadboard by syncing it to the implementation, then finding and fixing design problems. Two-phase: first make the breadboard accurate (code is ground truth), then judge the design.
+**`/breadboard-reflection`** — Reflect on an existing breadboard by syncing it to the implementation, then finding and fixing design problems. Two-phase: first make the breadboard accurate (code is ground truth, walking seams like module boundaries, functions, and shared state); then apply the Naming Test — if a behavior step can't be named with one plain verb, the boundaries are wrong.
 
 ## Install
 
