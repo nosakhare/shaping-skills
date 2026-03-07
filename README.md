@@ -64,23 +64,15 @@ mkdir -p ~/.cursor/skills
 
 # Option A: copy (Cursor has its own copy; re-copy after upstream changes)
 cp -r shaping ~/.cursor/skills/shaping
-cp shaping/skill.md ~/.cursor/skills/shaping/SKILL.md
 cp -r screen-mapping ~/.cursor/skills/screen-mapping
-cp screen-mapping/skill.md ~/.cursor/skills/screen-mapping/SKILL.md
 cp -r breadboarding ~/.cursor/skills/breadboarding
-cp breadboarding/skill.md ~/.cursor/skills/breadboarding/SKILL.md   # Cursor expects SKILL.md
 cp -r breadboard-reflection ~/.cursor/skills/breadboard-reflection
-cp breadboard-reflection/skill.md ~/.cursor/skills/breadboard-reflection/SKILL.md
 
 # Option B: symlink (single source of truth; git pull updates Cursor)
 ln -sf "$(pwd)/shaping" ~/.cursor/skills/shaping
-cp shaping/skill.md ~/.cursor/skills/shaping/SKILL.md
 ln -s "$(pwd)/screen-mapping" ~/.cursor/skills/screen-mapping
-cp screen-mapping/skill.md ~/.cursor/skills/screen-mapping/SKILL.md
 ln -s "$(pwd)/breadboarding" ~/.cursor/skills/breadboarding
-cp breadboarding/skill.md ~/.cursor/skills/breadboarding/SKILL.md   # Cursor expects SKILL.md
 ln -s "$(pwd)/breadboard-reflection" ~/.cursor/skills/breadboard-reflection
-cp breadboard-reflection/skill.md ~/.cursor/skills/breadboard-reflection/SKILL.md
 ```
 
 The ripple-check hook below is Claude-specific and is not used by Cursor.
