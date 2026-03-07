@@ -119,17 +119,17 @@ Shaping → Slicing
 
 | Phase | Purpose | Output |
 |-------|---------|--------|
-| **Shaping** | Explore the problem and solution space, select and detail an option | Shaping doc with R, options, coverage checks, See-Do breadboard |
+| **Shaping** | Explore the problem and solution space, select and detail an option | Shaping doc with R, options, coverage checks, See-Do tables, Breadboard |
 | **Slicing** | Break down for implementation | Implementation steps with demo-able UI |
 
 ### Phase Transition
 
 **Shaping → Slicing** happens when:
 - An option is selected (passes coverage check, feels right)
-- The option has been breadboarded into See-Do tables and behavior flows
+- The option has been screen mapped (See-Do tables) and breadboarded (Actions & Flows)
 - We need to plan implementation order
 
-You can't slice without a breadboarded option (See-Do tables + behavior flows).
+You can't slice without screen mapping and breadboarding (See-Do tables + Contexts/Actions/Flows).
 
 ---
 
@@ -211,11 +211,11 @@ These can happen in any order:
 - **Populate R** - Gather requirements as they emerge
 - **Sketch an option** - Propose a high-level approach (A, B, C...)
 - **Detail (components)** - Break an option into components (B1, B2...)
-- **Detail (elements)** - Expand a selected option into See-Do tables and behavior flows
+- **Screen map (UI elements)** - Expand a selected option into See-Do tables and high-level behavior flows
 - **Explore alternatives** - For a component, identify options (C3-A, C3-B...)
 - **Check coverage** - Build a coverage check (decision matrix) playing options against R
 - **Extract Rs** - When coverage checks reveal implicit requirements, add them to R as standalone items
-- **Breadboard** - Map the system to understand where changes happen and make the option more concrete
+- **Breadboard** - Map the system to understand where changes happen and translate the screen map into an Actions Reference and sequence diagram
 - **Spike** - Investigate unknowns to identify concrete steps needed
 - **Decide** - Pick alternatives, compose final solution
 - **Slice** - Break a breadboarded option into implementation steps
@@ -306,27 +306,27 @@ Avoid:
 - Vague questions ("Is this hard?")
 - Yes/no questions that don't reveal mechanics
 
-## Breadboards
+## Screen Mapping and Breadboarding
 
-Use the `/breadboarding` skill to map existing systems or detail an option into concrete screens and behavior. Breadboarding produces:
-- See-Do tables per screen (what users see and can do)
-- Behavior flows for complex logic (how things work underneath)
-- (Optional) Journey diagram (PlantUML swimlanes)
+Use the `/screen-mapping` and `/breadboarding` skills to detail an option into concrete screens, actions, and system flows.
 
-Invoke breadboarding when you need to:
+- **Screen Mapping (`/screen-mapping`)**: Translates a shaped option into concrete user interface requirements. Produces See-Do tables (what users see and can do) per screen.
+- **Breadboarding (`/breadboarding`)**: Maps the UI to the underlying architecture. Produces a Context list, an Actions Reference, and a Sequence Diagram showing the control and data flow.
+
+Invoke these when you need to:
 - Map existing code to understand where changes land
 - Translate a high-level option into concrete screens and actions
 - Reveal independent parts that can be built separately
 
-### See-Do Tables Are the Source of Truth
+### See-Do Tables Are the UX Source of Truth
 
-The See-Do tables (one per screen) define the breadboard. Behavior flows explain the logic behind complex actions. The journey diagram is a visual aid.
+The See-Do tables (one per screen) define the user experience. The Breadboard (Actions & Flows) explains the logic and architecture behind those actions.
 
-When receiving feedback on a breadboard:
+When receiving feedback on a design:
 1. **First** — update the See-Do tables (add/remove See items and Do actions)
-2. **Then** — update behavior flows and diagrams to match
+2. **Then** — update the Breadboard (Actions Reference and Sequence Diagrams) to match
 
-Never treat the diagram as the primary artifact. Changes flow from See-Do tables → behavior flows → diagram.
+Changes always flow from the UX definition (See-Do) to the architectural mapping (Breadboard).
 
 ### CURRENT as Reserved Option Name
 
@@ -446,10 +446,9 @@ Use "Detail X" (not a new letter) to show this is a breakdown of Option X, not a
 
 ### What Detailing Produces
 
-Use the `/breadboarding` skill to produce:
-- **See-Do tables** — Per screen: what users see (data, labels, status) and what they can do (buttons, inputs, links → destinations)
-- **Behavior flows** — Steps behind complex actions (API calls, data processing, multi-step logic)
-- **Journey diagram** — Full flow across all actors (PlantUML swimlanes)
+Use the `/screen-mapping` and `/breadboarding` skills to produce:
+- **See-Do tables (`/screen-mapping`)** — Per screen: what users see (data, labels, status) and what they can do (buttons, inputs, links → destinations)
+- **Breadboard (`/breadboarding`)** — Context List, Actions Reference, and Sequence Diagram tracing the logic across the full flow.
 
 ### Why "Detail X" Not "C"
 
@@ -468,7 +467,7 @@ Shaping produces up to four documents. Each has a distinct role:
 |----------|----------|---------|
 | **Frame** | Source, Problem, Outcome | The "why" — concise, stakeholder-level |
 | **Shaping doc** | Requirements, Options (CURRENT/A/B/...), See-Do tables, Breadboard, Coverage Check | The working document — exploration and iteration happen here |
-| **Slices doc** | Slice details, per-slice See-Do tables and behavior flows, flow maps | The implementation plan — how to build incrementally |
+| **Slices doc** | Slice details, per-slice Actions & Flows, sliced breadboard sequence diagram | The implementation plan — how to build incrementally |
 | **Slice plans** | V1-plan.md, V2-plan.md, etc. | Individual implementation plans for each slice |
 
 ### Document Lifecycle
@@ -551,13 +550,14 @@ After an option is breadboarded, slice it into implementation steps. Use the `/b
 
 **The flow:**
 1. **Parts** → high-level approaches in the option
-2. **Breadboard** → See-Do tables per screen with behavior flows (use `/breadboarding`)
+2. **Screen Map & Breadboard** → See-Do tables per screen + Actions & Sequence Diagrams (use `/screen-mapping` and `/breadboarding`)
 3. **Slices** → vertical increments that can each be demoed (use `/breadboarding` slicing section)
 
 **Key principle:** Every implementation step must end in demo-able UI. A step without visible output is a horizontal layer, not a proper implementation step.
 
 **Document outputs:**
-- **Slices doc** — slice definitions, per-slice See-Do tables and behavior flows, sliced breadboard
+**Document outputs:**
+- **Slices doc** — slice definitions, per-slice Actions Reference, sliced sequence diagram
 - **Slice plans** — individual implementation plans (V1-plan.md, V2-plan.md, etc.)
 
 ## Example

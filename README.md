@@ -22,9 +22,11 @@ These are for working with Claude directly on shaping and design. They're more e
 
 **`/shaping`** — Iterate on problem (requirements) and solution (options) simultaneously before committing to implementation. Uses R/S notation: R0, R1… for requirements; A, B, C for mutually exclusive options; A1, A2 for components of an option. Includes a coverage check (decision matrix) to see what's solved and what isn't, spike methodology for investigating unknowns, and multi-level consistency — changes propagate across shaping doc → slices doc → slice plans.
 
-**`/breadboarding`** — Map a system screen by screen — dual-purpose: works for mapping existing systems or designing from shaped parts. Produces See-Do tables (what users see and can do per screen), behavior flows (steps explaining complex actions), and an optional PlantUML journey diagram. Uses plain language and real names, not abstractions. Includes explicit slicing guidance for breaking flows into vertical, demo-able scopes.
+**`/screen-mapping`** — Translate shaped options into concrete user interface requirements. Produces See-Do tables (what users see and can do) per screen and plain-English Behavior Flows linking them. This is the UI/UX source of truth.
 
-**`/breadboard-reflection`** — Reflect on an existing breadboard by syncing it to the implementation, then finding and fixing design problems. Two-phase: first make the breadboard accurate (code is ground truth, walking seams like module boundaries, functions, and shared state); then apply the Naming Test — if a behavior step can't be named with one plain verb, the boundaries are wrong.
+**`/breadboarding`** — Map the technical implementation of a screen map to the underlying system. Produces a Context List (grouping related states), an Actions Reference (A# IDs for UI/System steps), and a Sequence Diagram showing control flow and data outputs. Includes explicit slicing guidance for breaking flows into demo-able scopes.
+
+**`/breadboard-reflection`** — Reflect on an existing breadboard by syncing it to the implementation, then finding and fixing design problems. Two-phase: first make the breadboard accurate (code is ground truth, walking seams like module boundaries, functions, and shared state); then apply the Naming Test — if a System Action can't be named with one plain verb, the boundaries are wrong.
 
 ## Install
 
@@ -33,6 +35,7 @@ These are for working with Claude directly on shaping and design. They're more e
 git clone https://github.com/nosakhare/shaping-skills.git ~/.local/share/shaping-skills
 ln -s ~/.local/share/shaping-skills/framing-doc ~/.claude/skills/framing-doc
 ln -s ~/.local/share/shaping-skills/kickoff-doc ~/.claude/skills/kickoff-doc
+ln -s ~/.local/share/shaping-skills/screen-mapping ~/.claude/skills/screen-mapping
 ln -s ~/.local/share/shaping-skills/breadboarding ~/.claude/skills/breadboarding
 ln -s ~/.local/share/shaping-skills/breadboard-reflection ~/.claude/skills/breadboard-reflection
 ln -s ~/.local/share/shaping-skills/shaping ~/.claude/skills/shaping
@@ -47,6 +50,7 @@ To use these as Codex skills, symlink them into `~/.codex/skills/`:
 ```bash
 mkdir -p ~/.codex/skills
 ln -s "$(pwd)/shaping" ~/.codex/skills/shaping
+ln -s "$(pwd)/screen-mapping" ~/.codex/skills/screen-mapping
 ln -s "$(pwd)/breadboarding" ~/.codex/skills/breadboarding
 ln -s "$(pwd)/breadboard-reflection" ~/.codex/skills/breadboard-reflection
 ```
@@ -60,6 +64,9 @@ mkdir -p ~/.cursor/skills
 
 # Option A: copy (Cursor has its own copy; re-copy after upstream changes)
 cp -r shaping ~/.cursor/skills/shaping
+cp shaping/skill.md ~/.cursor/skills/shaping/SKILL.md
+cp -r screen-mapping ~/.cursor/skills/screen-mapping
+cp screen-mapping/skill.md ~/.cursor/skills/screen-mapping/SKILL.md
 cp -r breadboarding ~/.cursor/skills/breadboarding
 cp breadboarding/skill.md ~/.cursor/skills/breadboarding/SKILL.md   # Cursor expects SKILL.md
 cp -r breadboard-reflection ~/.cursor/skills/breadboard-reflection
@@ -67,6 +74,9 @@ cp breadboard-reflection/skill.md ~/.cursor/skills/breadboard-reflection/SKILL.m
 
 # Option B: symlink (single source of truth; git pull updates Cursor)
 ln -sf "$(pwd)/shaping" ~/.cursor/skills/shaping
+cp shaping/skill.md ~/.cursor/skills/shaping/SKILL.md
+ln -s "$(pwd)/screen-mapping" ~/.cursor/skills/screen-mapping
+cp screen-mapping/skill.md ~/.cursor/skills/screen-mapping/SKILL.md
 ln -s "$(pwd)/breadboarding" ~/.cursor/skills/breadboarding
 cp breadboarding/skill.md ~/.cursor/skills/breadboarding/SKILL.md   # Cursor expects SKILL.md
 ln -s "$(pwd)/breadboard-reflection" ~/.cursor/skills/breadboard-reflection

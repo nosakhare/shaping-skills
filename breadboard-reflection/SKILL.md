@@ -24,7 +24,7 @@ The code is ground truth. The breadboard may have drifted or been built from a c
 
 1. **Read the implementation code.** Find the relevant source files. Don't rely on the breadboard's current description of what the code does.
 2. **Inspect the seams.** Walk the code using the checklist in "Reading Seams from the Implementation" below — module boundaries, module-level definitions, function signatures, full call chains, decorators, state co-access.
-3. **Update the breadboard to match.** Add missing nodes, stores, and places. Fix wrong wiring. Remove stale steps. The goal is: the breadboard now accurately reflects the code's actual structure — even if that structure has problems.
+3. **Update the breadboard to match.** Add missing Actions, Contexts, and data stores. Fix wrong sequence diagram wiring. Remove stale Actions. The goal is: the breadboard now accurately reflects the code's actual structure — even if that structure has problems.
 
 After Phase 1, the breadboard shows what IS, not what should be.
 
@@ -35,10 +35,10 @@ Phase 1 is preparation. Phase 2 is the point. Do not skip it.
 Now that the breadboard is accurate, inspect it for design problems. The code's names might be wrong. The split of responsibilities might not be ideal. The wiring might reveal unnecessary coupling or missing abstractions. Walk through each of these concrete checks:
 
 1. **Trace user stories through the wiring.** Does the path tell a coherent story? Can you explain every behavior without hidden steps?
-2. **Run the naming test on every behavior step.** For each node: who is the caller, what is the step-level effect, can you name it with one plain verb? Flag any that resist naming. (See "The Naming Test" in Phase 2 details below.)
-3. **Check for hidden data stores.** For every module-level constant, config object, or template that a behavior step reads: is it in the Data Stores table? If code reads it to produce effects, it's a store — even if it's static. Ask: "what does this step need to know in order to do its job?" If the answer references something not in the breadboard, it's missing.
-4. **Question the places.** For each place: does everything in it share a single responsibility? Do state and behavior steps within it co-access each other and stay isolated from other places? If a cluster of behavior steps, state, and UI elements all serve one job (e.g., "turn natural language into structured commands"), they might deserve their own place — even if the code doesn't separate them yet.
-5. **Check the problems table.** Unexplained behavior, incoherent wiring, naming resistance, etc.
+2. **Run the naming test on every System Action.** For each System Action: who is the caller, what is the step-level effect, can you name it with one plain verb? Flag any that resist naming. (See "The Naming Test" in Phase 2 details below.)
+3. **Check for hidden data stores.** For every module-level constant, config object, or template that an Action reads: is it in the Actions Reference? If code reads it to produce effects, it's a store — even if it's static. Ask: "what does this action need to know in order to do its job?" If the answer references something not in the breadboard, it's missing.
+4. **Question the Contexts.** For each Context: does everything in it share a single responsibility? Do state and System Actions within it co-access each other and stay isolated from other Contexts? If a cluster of System Actions, state, and UI Action elements all serve one job (e.g., "turn natural language into structured commands"), they might deserve their own Context — even if the code doesn't separate them yet.
+5. **Check the problems table.** Unexplained behavior, incoherent Sequence Diagram wiring, naming resistance, etc.
 6. **Fix problems.** Split, merge, rename, or rewire behavior steps. Update the breadboard.
 7. **Optionally update the code.** If the breadboard reveals a better design, refactor the implementation to match.
 
@@ -62,7 +62,7 @@ The code is ground truth. Read it before judging the breadboard.
 
 **5. Decorators and patterns signal architectural roles.** `@work(thread=True)` means background worker. `try/except` wrappers mean error boundary. `async` means concurrency management. These aren't just implementation details — they tell you a function has a specific role in the system's architecture. An event handler that delegates to a `@work` function is two distinct things: a trigger and an orchestrator.
 
-**6. State that co-accesses suggests places.** Which functions and state are used together but don't touch other parts of the system? If `loading`, `TOOLS`, and `SYSTEM_PROMPT` are all accessed by the command input flow and never by the table display, they cluster into a candidate place. Places emerge from co-access patterns, not just from UI layout.
+**6. State that co-accesses suggests Contexts.** Which functions and state are used together but don't touch other parts of the system? If `loading`, `TOOLS`, and `SYSTEM_PROMPT` are all accessed by the command input flow and never by the table display, they cluster into a candidate Context. Context boundaries emerge from co-access patterns, not just from UI layout.
 
 ### The Underlying Principle
 
@@ -71,10 +71,10 @@ A breadboard designed from a conceptual shape ("user types, LLM processes, app e
 ### Updating the Breadboard
 
 After inspecting the code, update the breadboard to match what IS:
-- Add missing nodes for functions the breadboard skipped
+- Add missing System Actions for functions the breadboard skipped
 - Add missing stores for constants and configuration the breadboard ignored
-- Fix wiring to match actual call chains
-- Add or restructure places based on state co-access
+- Fix sequence diagram wiring to match actual call chains
+- Add or restructure Contexts based on state co-access
 
 Do NOT fix design problems yet. The goal of Phase 1 is an accurate picture, even if the design has issues.
 
@@ -90,7 +90,7 @@ Take a user story from the requirements. Trace it through the See-Do tables and 
 
 Example: "User types a search query → results filter in real time → clicks a result → comes back and search is preserved."
 
-Trace: Search input (Do) → `search` flow (steps 1-6) → results appear in See → Click row (Do) → **Letter Detail** → Back (Do) → `restore state` flow → results restored in See.
+Trace: Search input (A1) → `activeQuery` stream (A2) → `performSearch` (A4) → results store (A7) → results list renders (A10) → Click row (A11) → **Letter Detail Context** (C2) → Back button (A17) → `initializeState` (A20) → results restored (A10).
 
 At each step, ask: does this logically lead to the next? Is anything missing?
 
@@ -101,8 +101,8 @@ At each step, ask: does this logically lead to the next? Is anything missing?
 | **Unexplained behavior** | You know the system does something (transforms data, makes decisions) but the breadboard doesn't show how — the explanation is missing |
 | **Incoherent wiring** | A node writes to S1 AND triggers the thing that writes to S1 — redundant or contradictory |
 | **Missing path** | The user story requires an effect, but no wiring path produces it |
-| **Diagram-only nodes** | Nodes in the diagram that aren't in the behavior step tables — decoration, not real steps |
-| **Naming resistance** | You can't name a behavior step with one plain verb (see Naming Test below) |
+| **Diagram-only Actions** | Actions in the sequence diagram that aren't defined in the Actions Reference |
+| **Naming resistance** | You can't name a System Action with one plain verb (see Naming Test below) |
 | **Stale elements** | The breadboard shows something that no longer exists in the code — should have been caught in Phase 1 |
 | **Wrong causality** | The wiring shows A calls B, but the code shows C calls B — should have been caught in Phase 1 |
 
@@ -114,10 +114,10 @@ The first five are design problems — the code works but the design could be be
 
 The main tool for finding and fixing boundary problems in behavior flows.
 
-For each behavior step:
+For each System Action:
 
-1. **Who calls this?** Who triggers this step?
-2. **What does this step do on its own?** Not the downstream chain — just this step's direct effect.
+1. **Who calls this?** Who triggers this action?
+2. **What does this action do on its own?** Not the downstream chain — just this action's direct effect.
 3. **Name it with one verb.** Describe the effect with a single, plain English verb.
 
 | Signal | Meaning |
@@ -174,17 +174,17 @@ The inability to find one natural verb was the signal that two distinct operatio
 When the naming test reveals a bundled step:
 
 1. **Split in the code first.** Extract distinct operations into separate functions. Even one-liners count if they represent a distinct effect.
-2. **Then update the behavior flow.** Add the new steps.
-3. **Then update any diagrams.**
+2. **Then update the Actions Reference.** Add the new System Actions.
+3. **Then update any sequence diagrams.**
 
-Never split only in a diagram (adding unnamed sub-nodes). If it's not a named function in the code and a step in the behavior flow, it's not real.
+Never split only in a diagram (adding unnamed actions). If it's not a named function in the code and a System Action in the diagram, it's not real.
 
 ### Fixing Connections
 
-When the behavior flow doesn't match the code:
+When the Sequence Diagram doesn't match the code:
 
 1. Read the code to understand the actual path.
-2. Update the behavior flow to match.
+2. Update the Sequence Diagram to match.
 3. Re-trace the user story to confirm it now makes sense.
 
 ---
@@ -193,10 +193,10 @@ When the behavior flow doesn't match the code:
 
 After any changes:
 
-1. **Re-trace user stories.** Does each story produce its expected result through the See-Do tables and behavior flows?
-2. **Describe the flow in plain language.** Check every claim against the breadboard. If your description says "step 3 calls the API" but the behavior flow doesn't show that, something was missed.
+1. **Re-trace user stories.** Does each story produce its expected result through the Actions Reference and Sequence Diagrams?
+2. **Describe the flow in plain language.** Check every claim against the Sequence Diagram. If your description says "step 3 calls the API" but the sequence diagram doesn't show that, something was missed.
 3. **Check consistency:**
-   - Every Do action points somewhere (screen or behavior flow)
-   - Every See item that shows data has a traceable source
-   - Every behavior step connects to something (calls, writes, or produces)
-   - Every step in a behavior flow corresponds to something real in the code
+   - Every UI Action that shows data has an incoming Data Output arrow
+   - Every System Action appears in at least one Sequence Diagram arrow
+   - Every data store Action has a read arrow pointing out of it
+   - Every arrow in the Sequence Diagram corresponds to something real in the code
