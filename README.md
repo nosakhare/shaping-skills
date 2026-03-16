@@ -16,6 +16,8 @@ These turn transcripts of real conversations into structured shaping documents. 
 
 **`/kickoff-doc`** — Turn a shaped project kickoff transcript into a reference document for the builder. Organizes by territory (the thing being built), not by timeline (how the conversation went). Design decisions go inline with the areas they affect, not in a separate list. Captures Context, Territory, and Build Sequence.
 
+**`/intercom-user-research`** — Reviews Intercom conversation transcripts to build an evidence base around a customer problem. Extracts recurring pain points, customer language, segments, and patterns from support conversations. This produces the evidence base that feeds into `/framing-doc`.
+
 ### Solo skills — more experimental
 
 These are for working with Claude directly on shaping and design. They're more experimental and less battle-tested than the document skills.
@@ -33,6 +35,7 @@ These are for working with Claude directly on shaping and design. They're more e
 ```bash
 # Clone the repo, then symlink each skill into your Claude Code skills directory
 git clone https://github.com/nosakhare/shaping-skills.git ~/.local/share/shaping-skills
+ln -s ~/.local/share/shaping-skills/intercom-user-research ~/.claude/skills/intercom-user-research
 ln -s ~/.local/share/shaping-skills/framing-doc ~/.claude/skills/framing-doc
 ln -s ~/.local/share/shaping-skills/kickoff-doc ~/.claude/skills/kickoff-doc
 ln -s ~/.local/share/shaping-skills/screen-mapping ~/.claude/skills/screen-mapping
@@ -49,6 +52,9 @@ To use these as Codex skills, symlink them into `~/.codex/skills/`:
 
 ```bash
 mkdir -p ~/.codex/skills
+ln -s "$(pwd)/intercom-user-research" ~/.codex/skills/intercom-user-research
+ln -s "$(pwd)/framing-doc" ~/.codex/skills/framing-doc
+ln -s "$(pwd)/kickoff-doc" ~/.codex/skills/kickoff-doc
 ln -s "$(pwd)/shaping" ~/.codex/skills/shaping
 ln -s "$(pwd)/screen-mapping" ~/.codex/skills/screen-mapping
 ln -s "$(pwd)/breadboarding" ~/.codex/skills/breadboarding
@@ -63,12 +69,18 @@ To use these skills as **global Cursor Agent Skills** (available in all projects
 mkdir -p ~/.cursor/skills
 
 # Option A: copy (Cursor has its own copy; re-copy after upstream changes)
+cp -r intercom-user-research ~/.cursor/skills/intercom-user-research
+cp -r framing-doc ~/.cursor/skills/framing-doc
+cp -r kickoff-doc ~/.cursor/skills/kickoff-doc
 cp -r shaping ~/.cursor/skills/shaping
 cp -r screen-mapping ~/.cursor/skills/screen-mapping
 cp -r breadboarding ~/.cursor/skills/breadboarding
 cp -r breadboard-reflection ~/.cursor/skills/breadboard-reflection
 
 # Option B: symlink (single source of truth; git pull updates Cursor)
+ln -s "$(pwd)/intercom-user-research" ~/.cursor/skills/intercom-user-research
+ln -s "$(pwd)/framing-doc" ~/.cursor/skills/framing-doc
+ln -s "$(pwd)/kickoff-doc" ~/.cursor/skills/kickoff-doc
 ln -sf "$(pwd)/shaping" ~/.cursor/skills/shaping
 ln -s "$(pwd)/screen-mapping" ~/.cursor/skills/screen-mapping
 ln -s "$(pwd)/breadboarding" ~/.cursor/skills/breadboarding
