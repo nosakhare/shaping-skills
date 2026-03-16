@@ -1,6 +1,6 @@
 ---
 name: screen-mapping
-description: Map a user journey screen by screen. Define exactly what users see and what they can do before writing code or planning system architecture. Use as the bridge between shaped pitches and technical breadboarding.
+description: Maps a user journey screen by screen. Defines exactly what users see and what they can do before code or system architecture is planned. Use as the bridge between shaped pitches and technical breadboarding.
 ---
 
 # Screen Mapping (See-Do)

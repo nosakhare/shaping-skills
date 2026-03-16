@@ -1,6 +1,6 @@
 ---
 name: framing-doc
-description: Create a framing document from conversation transcripts. Use when the user has transcripts (VTT, call notes, etc.) and wants to produce a frame that captures the problem worth solving and why it was chosen over alternatives.
+description: Creates a framing document from conversation transcripts. Use when the user has transcripts, such as VTT files or call notes, and needs a frame that captures the problem worth solving and why it was chosen over alternatives.
 ---
 
 # Framing from Conversation Transcripts

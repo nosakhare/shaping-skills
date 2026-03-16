@@ -1,6 +1,6 @@
 ---
 name: kickoff-doc
-description: Turn a shaped project kickoff transcript into a reference document for the builder. Use when the user has a transcript (VTT, etc.) from a kickoff call and wants to produce a document that captures what was shaped and agreed.
+description: Turns a shaped project kickoff transcript into a reference document for the builder. Use when the user has a transcript, such as a VTT file, from a kickoff call and needs a document that captures what was shaped and agreed.
 ---
 
 # Kickoff Document from Transcript

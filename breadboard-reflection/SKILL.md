@@ -1,4 +1,9 @@
-# Breadboard Analysis
+---
+name: breadboard-reflection
+description: Reflects on an existing breadboard by syncing it to the implementation, then identifying and fixing design problems. Use when reviewing or repairing a breadboard built from real code.
+---
+
+# Breadboard Reflection
 
 Reflect on a breadboard by syncing it to the implementation, then finding and fixing design problems. Works on existing breadboards built with the `/breadboarding` skill.
 

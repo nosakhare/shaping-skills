@@ -1,0 +1,11 @@
+{
+  "skills": ["breadboarding"],
+  "query": "Map an existing workflow from a page button click through backend processing to the rendered result. Produce the Context List, Actions Reference, and sequence diagram.",
+  "files": [],
+  "expected_behavior": [
+    "Produces exactly the three core breadboard artifacts: Context List, Actions Reference, and sequence diagram",
+    "Uses real action names and distinguishes UI actions from system actions",
+    "Shows control flow and data output separately in the sequence diagram",
+    "Treats the backend or external system boundary as a context when it participates in the flow"
+  ]
+}

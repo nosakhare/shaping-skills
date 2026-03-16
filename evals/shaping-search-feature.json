@@ -1,0 +1,11 @@
+{
+  "skills": ["shaping"],
+  "query": "Shape a search feature for an index page. Start from requirements, propose two competing options, run a coverage check, and identify what still needs spikes before we can decide.",
+  "files": [],
+  "expected_behavior": [
+    "Uses shaping notation with requirements and options rather than jumping directly to implementation tasks",
+    "Introduces at least two distinct solution options or option components with concrete approaches",
+    "Produces a coverage check that compares options against requirements",
+    "Calls out open questions or spikes instead of pretending unknowns are solved"
+  ]
+}

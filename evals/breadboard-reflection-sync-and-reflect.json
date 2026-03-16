@@ -1,0 +1,11 @@
+{
+  "skills": ["breadboard-reflection"],
+  "query": "Review an existing breadboard against the implementation. First sync the breadboard so it matches the code, then identify design problems and suggest boundary or naming fixes.",
+  "files": [],
+  "expected_behavior": [
+    "Performs the work in two phases: sync to implementation first, then reflect on design quality",
+    "Treats the code as ground truth instead of assuming the breadboard is correct",
+    "Identifies at least one concrete design issue such as hidden stores, naming resistance, or boundary problems",
+    "Suggests breadboard fixes that make the behavior easier to explain"
+  ]
+}
