@@ -26,9 +26,9 @@ These are for working with Claude directly on shaping and design. They're more e
 
 **`/screen-mapping`** — Translate shaped options into concrete user interface requirements. Produces See-Do tables (what users see and can do) per screen and plain-English Behavior Flows linking them. This is the UI/UX source of truth.
 
-**`/breadboarding`** — Map the technical implementation of a screen map to the underlying system. Produces a Context List (grouping related states), an Actions Reference (A# IDs for UI/System steps), and a Sequence Diagram showing control flow and data outputs. Includes explicit slicing guidance for breaking flows into demo-able scopes.
+**`/breadboarding`** — Map the technical implementation of a screen map to the underlying system. Produces a Places List (P#), three typed element tables — UI (U#: what the user sees or interacts with), Code (N#: functions and handlers), Stores (S#: state that persists and is read and written) — a State Diagram showing navigation topology between Places, and a Sequence Diagram showing temporal flow. Every document includes a Legend so it is self-contained. Includes explicit slicing guidance for breaking flows into demo-able scopes.
 
-**`/breadboard-reflection`** — Reflect on an existing breadboard by syncing it to the implementation, then finding and fixing design problems. Two-phase: first make the breadboard accurate (code is ground truth, walking seams like module boundaries, functions, and shared state); then apply the Naming Test — if a System Action can't be named with one plain verb, the boundaries are wrong.
+**`/breadboard-reflection`** — Reflect on an existing breadboard by syncing it to the implementation, then finding and fixing design problems. Two-phase: first make the breadboard accurate (code is ground truth, walking seams like module boundaries, functions, and shared state); then apply the Naming Test — if a Code element (N#) can't be named with one plain verb, the boundaries are wrong.
 
 ## Install
 
