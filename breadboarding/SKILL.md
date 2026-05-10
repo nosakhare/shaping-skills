@@ -1,15 +1,17 @@
 ---
 name: breadboarding
-description: Maps a description of how a system works, or should work, into a Context list, an Actions Reference, and a sequence diagram showing the flow. Use when mapping existing systems or designing new ones.
+description: Maps a description of how a system works, or should work, into a Places list, UI/Code/Stores tables, a state diagram showing navigation, and a sequence diagram showing flow. Use when mapping existing systems or designing new ones.
 ---
 
 # Breadboarding (Plain English Guide)
 
-Breadboarding maps out a system — either one that already exists or one you're designing — by capturing three things:
+Breadboarding maps out a system — either one that already exists or one you're designing — by capturing four things:
 
-- **Contexts** — the distinct screens or boundaries the user moves between (a page, a modal, the backend)
-- **Actions** — every button, input, display, function, and data store involved, each given a single ID
-- **Flows** — how those Actions connect and trigger each other, shown as a sequence diagram
+- **Places** — the distinct screens or boundaries the user moves between (a page, a modal, the backend)
+- **UI (U#)** — what the user sees or interacts with: buttons, inputs, displays, spinners
+- **Code (N#)** — functions and handlers you can call or observe
+- **Stores (S#)** — state that persists and is read and written
+- **Flows** — how those elements connect, shown as a state diagram (navigation) and a sequence diagram (temporal flow)
 
 ---
 
@@ -24,15 +26,16 @@ Use this when you're trying to figure out how something already works — for ex
 - A description of the workflow to trace, written from the perspective of someone trying to make something happen (e.g. "I click Submit — what happens next?")
 
 **You get back:**
-- A Context list
-- An Actions Reference
-- A sequence diagram showing the Flow
+- A Places list
+- UI, Code, and Stores tables
+- A state diagram showing navigation between Places
+- A sequence diagram showing the flow
 
-If the workflow spans a frontend and a backend, make one breadboard that covers both. Label Contexts clearly so it's obvious which system each one belongs to.
+If the workflow spans a frontend and a backend, make one breadboard that covers both. Label Places clearly so it's obvious which system each one belongs to.
 
 ### 2. Designing Something New
 
-Use this when you've sketched out a new feature as a list of parts and need to work out the exact details — what Actions are needed and how they Flow together.
+Use this when you've sketched out a new feature as a list of parts and need to work out the exact details — what UI, Code, and Stores are needed and how they flow together.
 
 **You bring:**
 - A list of parts (from your design/shaping work)
@@ -40,54 +43,54 @@ Use this when you've sketched out a new feature as a list of parts and need to w
 - The existing system (if the new parts need to plug into it)
 
 **You get back:**
-- Same three artefacts as above
+- Same four artefacts as above
 
 ### 3. When You Have Both
 
-Often you'll have an existing system plus some new changes. Breadboard both together — show the existing Actions and the new ones in one Actions Reference, and trace the combined Flow in one sequence diagram.
+Often you'll have an existing system plus some new changes. Breadboard both together — show the existing UI, Code, and Stores alongside the new ones, and trace the combined flow in one sequence diagram.
 
 ### 4. Reading a Hand-Drawn Breadboard
 
-Sometimes breadboards are sketched on a whiteboard. The same concepts apply — Contexts, Actions, Flows — but the layout uses visual stacking instead of tables.
+Sometimes breadboards are sketched on a whiteboard. The same concepts apply — Places, UI/Code/Stores, Flows — but the layout uses visual stacking instead of tables.
 
 | Visual Element | What It Means |
 |---|---|
-| Coloured block at the top of a stack | A Context |
-| Blocks stacked underneath | Actions belonging to that Context |
-| Code blocks floating between stacks | System Actions (functions, etc.) |
-| Block at the top-left of a Context | A loader — what data the Context needs to render |
-| Solid arrows | Control Flow → (what triggers what) |
-| Dashed arrows | Data Output ← (where results flow back) |
+| Coloured block at the top of a stack | A Place |
+| Blocks stacked underneath | UI or Code elements belonging to that Place |
+| Code blocks floating between stacks | Code elements (functions, etc.) |
+| Block at the top-left of a Place | A loader — what data the Place needs to render |
+| Solid arrows | Triggers → (what calls what) |
+| Dashed arrows | Feeds ← (where results flow back) |
 | Indented blocks in a different colour | Conditional branches (if/else logic) |
-| `_ContextName` in a stack | A reference to another Context defined elsewhere |
+| `_PlaceName` in a stack | A reference to another Place defined elsewhere |
 | `?` or `~` prefix, or dashed border | Speculative — not confirmed yet |
 | Large box around multiple stacks | A system or responsibility boundary |
 | Freeform text | Notes, open questions, or context |
 
-**Converting to the standard format:** Map each stack to its Context, list Actions top to bottom in the Actions Reference, and turn arrows into sequence diagram messages labelled with Action IDs.
+**Converting to the standard format:** Map each stack to its Place, list UI/Code/Stores in their respective tables, and turn arrows into sequence diagram messages labelled with their IDs.
 
 ---
 
 ## Core Concepts
 
-### Contexts
+### Places
 
-A **Context** is "where you are" in the interface — a bounded situation with a specific set of Actions available. When you're in a Context, you can only interact with what's there. To do something else, you have to leave.
+A **Place** is "where you are" in the interface — a bounded situation with a specific set of UI elements available. When you're in a Place, you can only interact with what's there. To do something else, you have to leave.
 
-A Context is about the user's experience, not technical details like URLs or components.
+A Place is about the user's experience, not technical details like URLs or components.
 
 #### The Blocking Test
 
-The easiest way to tell if something is a new Context: **can you still interact with what's behind it?**
+The easiest way to tell if something is a new Place: **can you still interact with what's behind it?**
 
 | Answer | Meaning |
 |---|---|
-| No — you're blocked | You're in a different Context |
-| Yes — you can still click around | Same Context, just a local change |
+| No — you're blocked | You're in a different Place |
+| Yes — you can still click around | Same Place, just a local change |
 
 #### Examples
 
-| UI Element | Blocking? | New Context? | Why |
+| UI Element | Blocking? | New Place? | Why |
 |---|---|---|---|
 | Modal dialog | Yes | Yes | You can't click anything behind it |
 | Confirmation popover | Yes | Yes | You must respond before moving on |
@@ -102,19 +105,19 @@ Ask yourself: did *everything* change, or just a small part while the rest staye
 
 | Type | What Happens | How to Handle It |
 |---|---|---|
-| Local change | Only part of the UI changes | Same Context — model it as a conditional |
-| Navigation | Whole screen changes, or something blocking appears | Different Context |
+| Local change | Only part of the UI changes | Same Place — model it as a conditional |
+| Navigation | Whole screen changes, or something blocking appears | Different Place |
 
-#### Mode-Based Contexts
+#### Mode-Based Places
 
-If a "mode" (like Edit Mode) transforms the entire screen, treat it as a separate Context:
+If a "mode" (like Edit Mode) transforms the entire screen, treat it as a separate Place:
 
 ```
-C1: CMS Page (Read Mode)
-C2: CMS Page (Edit Mode)
+P1: CMS Page (Read Mode)
+P2: CMS Page (Edit Mode)
 ```
 
-The flag that switches between modes is just a navigation mechanism — don't list it as data inside either Context.
+The flag that switches between modes is just a navigation mechanism — don't list it as a Store inside either Place.
 
 #### Three Questions for Any Button or Control
 
@@ -122,112 +125,155 @@ The flag that switches between modes is just a navigation mechanism — don't li
 2. Where am I right now?
 3. Where do I end up if I use it?
 
-If the answer to #3 is "everything changes" or "I can't interact with what's behind until I respond," you're navigating to a new Context.
+If the answer to #3 is "everything changes" or "I can't interact with what's behind until I respond," you're navigating to a new Place.
 
-#### Naming Contexts
+#### Naming Places
 
 | Pattern | When to Use |
 |---|---|
-| `C#: Page Name` | A standard page or route |
-| `C#: Page Name (Mode)` | A mode-based version of a page |
-| `C#: Modal Name` | A modal dialog |
-| `C#: Backend` | The API or database layer |
+| `P#: Page Name` | A standard page or route |
+| `P#: Page Name (Mode)` | A mode-based version of a page |
+| `P#: Modal Name` | A modal dialog |
+| `P#: Backend` | The API or database layer |
 
-When spanning multiple systems: `C1: Checkout Page (frontend)`, `C4: Payment API (backend)`.
+When spanning multiple systems: `P1: Checkout Page (frontend)`, `P4: Payment API (backend)`.
 
-#### Sub-Contexts
+#### Sub-Places
 
-A **sub-context** is a defined section within a Context — useful when a Context has multiple distinct widgets or areas. Use hierarchical IDs: `C2.1`, `C2.2`, etc.
+A **sub-place** is a defined section within a Place — useful when a Place has multiple distinct widgets or areas. Use hierarchical IDs: `P2.1`, `P2.2`, etc.
 
-When zooming in on one sub-context, add a placeholder to show there's more on the page:
+When zooming in on one sub-place, add a placeholder to show there's more on the page:
 ```
 [... other page content ...]
 ```
 
-### Actions
+### UI (U#)
 
-**Actions** are the individual pieces you can act on. Every Action gets a single ID in the format `A1`, `A2`, `A3`, …
+**UI elements** are what the user sees or interacts with. Every UI element gets a `U#` ID.
 
-There are two kinds:
+Examples: buttons, inputs, text displays, spinners, scroll areas, result rows, notification banners.
 
-- **Action (UI):** Anything the user sees or interacts with — buttons, inputs, text displays, spinners, scroll areas
-- **Action (System):** Anything in the code that can be triggered or observed — functions, subscriptions, data stores, framework hooks
+### Code (N#)
 
-Both kinds live in the same Actions Reference. The type is noted in the definition.
+**Code elements** are functions and handlers you can call or observe. Every code element gets an `N#` ID.
+
+Examples: event handlers, API calls, subscriptions, framework hooks, async tasks.
+
+### Stores (S#)
+
+**Stores** are state that persists and is read and written. Every store gets an `S#` ID.
+
+Examples: observables, arrays, booleans, browser URL, localStorage, clipboard.
+
+Stores have a different lifecycle from Code: they aren't called, they're written to and read from. A store belongs in the Place where its data is *consumed* — not where it's produced.
 
 ### Flows
 
-A Flow describes how Actions connect. There are two directions:
+A Flow describes how elements connect. There are two directions:
 
-- **Control Flow →** — what an Action triggers or calls (a function call, a write to a data store, navigation to a new Context)
-- **Data Output ←** — where an Action's result goes (a return value flowing back to its caller, a data store being read)
+- **Triggers →** — what a UI or Code element calls next (a function call, a write to a store, navigation to a new Place)
+- **Feeds ←** — where data flows back to (a store providing data to a display, a query result returning to its caller)
 
-Flows are shown in a sequence diagram, not in table columns. Solid arrows represent Control Flow →. Dashed arrows represent Data Output ←.
+Flows are shown in a state diagram (for navigation between Places) and a sequence diagram (for temporal flow within a workflow).
 
 ---
 
-## The Three Artefacts
+## The Four Artefacts
 
-Every breadboard produces exactly these three things.
+Every breadboard produces exactly these four things, preceded by a **Legend**.
 
-### 1. Context List
+### Legend
 
-A simple numbered list of every Context in the workflow.
+Include this at the top of every breadboard document so it is self-contained:
 
-| # | Context | Description |
+| Prefix | Type | Definition |
 |---|---|---|
-| C1 | Search Page | Main search interface |
-| C2 | Detail Page | Individual result view |
-| C3 | Backend | Search service and data layer |
+| P# | Place | A bounded context of interaction — where you are and what you can do |
+| U# | UI | What the user sees or interacts with |
+| N# | Code | Functions and handlers you can call or observe |
+| S# | Store | State that persists and is read and written |
 
-### 2. Actions Reference
+### 1. Places List
 
-A single bullet list where every Action — UI or System — is defined once. Each entry follows this format:
+A simple numbered table of every Place in the workflow.
 
-> **A#** – name: short description of what it does.
+| # | Place | Description |
+|---|---|---|
+| P1 | Search Page | Main search interface |
+| P2 | Detail Page | Individual result view |
+| P3 | Backend | Search service and data layer |
 
-The type (UI or System) is noted in parentheses where it helps clarity.
+### 2. UI Table
 
-**Example:**
+Every element the user sees or interacts with, defined once.
 
-- **A1** – search input (UI): text field where the user types a query; triggers A2 on each keystroke
-- **A2** – `activeQuery.next()` (System): pushes the new query value into the observable stream; triggers A3
-- **A3** – `activeQuery` subscription (System): observes the stream with a 90ms debounce; triggers A4 when value is ≥ 3 chars
-- **A4** – `performSearch()` (System): sets loading state, calls the search service; triggers A5, A6, A7
-- **A5** – `searchOneCategory()` (System): builds the Typesense filter and calls A8; returns results to A4
-- **A6** – `loading` store (System): holds the boolean loading state; feeds A9
-- **A7** – `results` store (System): holds the array of search results; feeds A10
-- **A8** – `rawSearch()` (System): queries Typesense; returns `{found, hits}` to A5
-- **A9** – loading spinner (UI): renders while A6 is true
-- **A10** – results list (UI): renders each hit from A7
-- **A11** – result row (UI): click navigates to C2
+| # | Name | Description | Triggers | Feeds |
+|---|---|---|---|---|
+| U1 | Search input | Text field where the user types a query | N1 | |
+| U2 | Loading spinner | Renders while S1 is true | | |
+| U3 | Results list | Renders each hit from S2 | | |
+| U4 | Result row | Click navigates to P2 | P2 | |
 
-### 3. Sequence Diagram
+### 3. Code Table
 
-A Mermaid sequence diagram with one lifeline per Context. Arrows between lifelines are labelled with Action IDs. Solid arrows show Control Flow →. Dashed arrows show Data Output ←.
+Every function, subscription, and handler, defined once.
+
+| # | Name | Description | Triggers | Feeds |
+|---|---|---|---|---|
+| N1 | `activeQuery.next()` | Pushes query into the observable stream | N2 | |
+| N2 | `activeQuery` subscription | Observes stream with 90ms debounce; fires when ≥ 3 chars | N3 | |
+| N3 | `performSearch()` | Sets loading state, calls search service | N4, S1, S2 | |
+| N4 | `rawSearch()` | Queries the search index | | S2 |
+
+### 4. Stores Table
+
+Every piece of state that persists and is read and written, defined once.
+
+| # | Name | Description | Written by | Feeds |
+|---|---|---|---|---|
+| S1 | `loading` | Boolean loading state | N3 | U2 |
+| S2 | `results` | Array of search result hits | N3, N4 | U3 |
+
+### 5. State Diagram
+
+A Mermaid `stateDiagram-v2` showing Places as states and navigation as labelled transitions. Include whenever the breadboard has user-facing Places with navigation between them; optional for purely backend/system flows.
+
+```mermaid
+stateDiagram-v2
+    [*] --> P1
+    P1: P1 Search Page
+    P2: P2 Detail Page
+
+    P1 --> P2 : U4 result row click
+    P2 --> P1 : U7 back button
+```
+
+### 6. Sequence Diagram
+
+A Mermaid sequence diagram with one lifeline per Place. Arrows are labelled with element IDs. Solid arrows show Triggers →. Dashed arrows show Feeds ←.
 
 ```mermaid
 sequenceDiagram
-    participant C1 as C1: Search Page
-    participant C3 as C3: Backend
+    participant P1 as P1: Search Page
+    participant P3 as P3: Backend
 
-    C1->>C1: A1 search input (type)
-    C1->>C1: A2 activeQuery.next()
-    C1->>C1: A3 subscription fires
-    C1->>C3: A4 performSearch() → A5 searchOneCategory()
-    C3-->>C1: A8 rawSearch() results
-    C1->>C1: A6 loading store update
-    C1->>C1: A7 results store update
-    C1-->>C1: A9 loading spinner renders
-    C1-->>C1: A10 results list renders
+    P1->>P1: U1 search input (type)
+    P1->>P1: N1 activeQuery.next()
+    P1->>P1: N2 subscription fires
+    P1->>P3: N3 performSearch() → N4 rawSearch()
+    P3-->>P1: N4 results returned
+    P1->>P1: S1 loading store update
+    P1->>P1: S2 results store update
+    P1-->>P1: U2 loading spinner renders
+    P1-->>P1: U3 results list renders
 ```
 
 **Line conventions:**
 
 | Arrow | Mermaid Syntax | Meaning |
 |---|---|---|
-| Solid `->>`  | `A ->> B: label` | Control Flow → (triggers, calls, writes) |
-| Dashed `-->>`| `A -->> B: label` | Data Output ← (return values, store reads) |
+| Solid `->>`  | `A ->> B: label` | Triggers → (calls, writes, navigates) |
+| Dashed `-->>`| `A -->> B: label` | Feeds ← (return values, store reads) |
 
 ---
 
@@ -235,140 +281,129 @@ sequenceDiagram
 
 ### Mapping an Existing System
 
-**Step 1: Identify Contexts.**
-Walk through the user journey and list every distinct Context — every screen, modal, or system boundary the user crosses.
+**Step 1: Identify Places.**
+Walk through the user journey and list every distinct Place — every screen, modal, or system boundary the user crosses.
 
 **Step 2: Trace through the code.**
 Starting from the entry point (a route, an API endpoint), follow the code to find every component touched by that flow.
 
-**Step 3: List Actions once in the Actions Reference.**
-For each component, identify every button, input, display, function, subscription, and data store involved. Give each one an A-ID and write a short definition. Use real names — if you write "DATABASE," stop and find the actual method (`userRepo.save()`).
+**Step 3: Fill the UI, Code, and Stores tables.**
+For each component, identify every button, input, display, function, subscription, and store involved. Assign U#, N#, or S# IDs. Use real names — if you write "DATABASE," stop and find the actual method (`userRepo.save()`).
 
-**Step 4: Note Control Flow → and Data Output ← in each definition.**
-In the definition for each Action, describe what it triggers (Control Flow →) and where its output goes (Data Output ←). This is prose in the Actions Reference, not columns in a table.
+**Step 4: Fill in Triggers and Feeds for each row.**
+For each element, note what it triggers next and what it feeds data to. Use the ID (e.g. `N3`, `S1`) not prose descriptions.
 
-**Step 5: Draw a sequence diagram to show Flows.**
-Place each Context as a lifeline. Draw solid arrows for Control Flow → and dashed arrows for Data Output ←, labelled with Action IDs. Trace the full journey from the first user interaction to the final visible result.
+**Step 5: Draw a state diagram to show navigation.**
+Place each user-facing Place as a state node. Draw transitions labelled with the U# that causes navigation.
 
-**Step 6: Check against the code.**
-Read the code again. Confirm every Action exists and the sequence diagram matches reality.
+**Step 6: Draw a sequence diagram to show flow.**
+Place each Place as a lifeline. Draw solid arrows for Triggers → and dashed arrows for Feeds ←, labelled with element IDs. Trace the full journey from the first user interaction to the final visible result.
+
+**Step 7: Check against the code.**
+Read the code again. Confirm every element exists and both diagrams match reality.
 
 ---
 
 ### Designing Something New
 
-**Step 1: Identify Contexts.**
-For each part in your design, decide which Context it lives in — an existing one being modified, or a new one being created.
+**Step 1: Identify Places.**
+For each part in your design, decide which Place it lives in — an existing one being modified, or a new one being created.
 
-**Step 2: List Actions once in the Actions Reference.**
-For each part, identify the UI Actions the user will see and the System Actions that implement it. Give each an A-ID and write a short definition.
+**Step 2: Fill the UI, Code, and Stores tables.**
+For each part, identify the UI elements the user will see, the Code elements that implement it, and the Stores that hold state. Assign IDs.
 
-**Step 3: Make sure every UI Action has a System Action supporting it.**
-For each UI Action that displays data, check: which System Action provides that data? If none exists, add it.
+**Step 3: Make sure every UI element that shows data has a Store or Code element feeding it.**
+For each U# that displays data, check: which N# or S# provides that data? If none exists, add it.
 
-**Step 4: Draw a sequence diagram to show Flows.**
-Trace the intended behaviour from start to finish. Use solid arrows for Control Flow → and dashed arrows for Data Output ←.
+**Step 4: Draw a state diagram.**
+Check that every Place is reachable from the entry point. Every terminal Place (no outgoing transitions) should be intentional.
 
-**Step 5: Connect to the existing system (if needed).**
-Add the existing Actions the new ones must connect to in the Actions Reference. Show those connections in the sequence diagram.
+**Step 5: Draw a sequence diagram to show flow.**
+Trace the intended behaviour from start to finish. Use solid arrows for Triggers → and dashed arrows for Feeds ←.
 
-**Step 6: Check for completeness.**
-- Every UI Action that shows data should have a System Action feeding it
-- Every System Action should appear in at least one arrow in the sequence diagram
-- Functions should have outgoing Control Flow → arrows
-- Queries should have incoming Data Output ← arrows
-- Data stores should have at least one read arrow pointing out of them
+**Step 6: Connect to the existing system (if needed).**
+Add the existing elements the new ones must connect to in the tables. Show those connections in the sequence diagram.
 
-**Step 7: Treat everything the user sees as a UI Action.**
-Emails, notifications, and any other visible output are UI Actions and need a System Action flowing to them.
+**Step 7: Check for completeness.**
+- Every U# that shows data should have an N# or S# feeding it
+- Every N# should appear in at least one arrow in the sequence diagram
+- Every S# should have something feeding from it (a U# reading it)
+- Every Place should be reachable in the state diagram
+
+**Step 8: Treat everything the user sees as a U#.**
+Emails, notifications, and any other visible output are UI elements and need a Code or Store element feeding them.
 
 ---
 
 ## Key Rules
 
-### Always check the Actions Reference — don't rely on memory
+### Always check the tables — don't rely on memory
 
-When tracing a flow backwards, scan the definitions for all Actions that mention your target in their Control Flow →. Don't follow what you think you remember.
+When tracing a flow backwards, scan the Triggers and Feeds columns for all elements that reference your target. Don't follow what you think you remember.
 
 ### Every name must be real (when mapping existing code)
 
-Never invent abstractions. Every Action name must point to something real in the codebase.
+Never invent abstractions. Every N# name must point to something real in the codebase.
 
-### Not everything is an Action
+### Not everything qualifies
 
-An Action is something you can act on that has meaningful identity in the system. Some things look like Actions but are actually just implementation details:
+Each type has a threshold:
 
-| Type | Example | Why It's Not an Action |
+| Type | Example | Why It Doesn't Qualify |
 |---|---|---|
-| Visual containers | `modal-frame wrapper` | You can't act on a wrapper — it's just a Context boundary |
-| Internal transforms | `letterDataTransform()` | An implementation detail of the caller |
-| Navigation mechanisms | `modalService.open()` | Just the "how" of getting to a Context — draw the arrow directly to the Context |
-
-When reviewing your Actions Reference, ask for each System Action: "Is this actually something I can act on, or is it just describing *how* something happens?" If it's just the "how," remove it and draw the sequence arrow directly to the destination.
+| Visual containers | `modal-frame wrapper` | You can't interact with a wrapper — it's just a Place boundary |
+| Internal transforms | `letterDataTransform()` | An implementation detail of its caller; give the output to the caller's Feeds |
+| Navigation mechanisms | `modalService.open()` | Just the "how" of getting to a Place — draw the arrow directly to the Place |
 
 ```
-❌ A8 → A22 → C3     (A22 is modalService.open — just a mechanism)
-✅ A8 → C3           (action navigates to context)
+❌ N8 → N22 → P3     (N22 is modalService.open — just a mechanism)
+✅ N8 → P3           (code navigates to place)
 
-❌ A6 → A20 → S2     (A20 is a data transform — internal to A6)
-✅ A6 → S2           (callback writes to store)
+❌ N6 → N20 → S2     (N20 is a data transform — internal to N6)
+✅ N6 → S2           (code writes to store)
 ```
 
-### Two flows to trace: Navigation and Data
-
-| Flow | What It Tracks | Arrow Type |
-|---|---|---|
-| **Control Flow →** | How the user moves between Contexts; what triggers what | Solid `->>` |
-| **Data Output ←** | How results and state flow back to what the user sees | Dashed `-->>` |
-
-When reviewing a sequence diagram, trace both: can you follow the user's journey from Context to Context? And for every UI Action that shows data, can you trace where that data comes from?
-
-### Every UI Action that shows data needs a source
+### Every U# that shows data needs a source
 
 ```
-❌ A10: results list — no incoming Data Output arrow
-✅ A7 (results store) -->> A10 (store feeds the display)
-✅ A5 -->> A10 (query result feeds the display)
+❌ U3: results list — no incoming Feeds arrow
+✅ S2 (results store) feeds U3
+✅ N4 (query result) feeds U3
 ```
 
 If a display has no data source, either the source is missing or the display isn't real.
 
-### Every System Action must appear in the sequence diagram
+### Every N# must appear in the sequence diagram
 
-- Functions → should have at least one outgoing Control Flow → arrow
-- Queries → should have at least one incoming Data Output ← arrow
-- Data stores → should have at least one read arrow pointing out
+- Functions → should have at least one outgoing Triggers → arrow
+- Queries → should have at least one incoming Feeds ← arrow
 
-### Side effects need their own Action entry
+### Side effects need their own S# entry
 
-If a System Action has side effects outside the system boundary (browser URL, localStorage, external API, analytics), add a separate Action entry for that external state and draw an arrow to it:
+If a Code element has side effects outside the system boundary (browser URL, localStorage, external API, analytics), add a Store for that external state and draw an arrow to it:
 
 ```
-❌ A41: updateUrl() — no outgoing arrow
-✅ A41: updateUrl() → A42 (Browser URL store)
+❌ N41: updateUrl() — no outgoing arrow
+✅ N41: updateUrl() → S5 (Browser URL store)
 ```
 
-Common external state to model as Actions:
+Common external state to model as Stores:
 - Browser URL (query params, hash fragments)
 - `localStorage` / `sessionStorage`
 - Clipboard
 - Browser History
 
-### Keep Control Flow and Data Output distinct
+### Keep Triggers and Feeds distinct
 
-Solid arrows show what triggers what. Dashed arrows show where output goes. Don't mix them up in the sequence diagram.
+Solid arrows show what calls what. Dashed arrows show where data goes. Don't mix them up in the sequence diagram.
 
 ### Show navigation inline
 
-Draw navigation arrows directly from the Action that causes navigation to the destination Context lifeline. Don't route everything through a central Router entry.
+Draw navigation arrows directly from the element that causes navigation to the destination Place lifeline. Don't route everything through a central Router entry.
 
-### Put data stores in the Context where their data is consumed
+### The backend is a Place too
 
-A data store belongs in the Context where its data is *used* to make something happen — not where it's written. Trace who reads it; that determines which Context it belongs to.
-
-### The backend is a Context too
-
-The database and API resolvers aren't floating infrastructure — they're a Context with their own Actions. List them in the Actions Reference and give them a lifeline in the sequence diagram.
+The database and API resolvers aren't floating infrastructure — they're a Place with their own Code and Stores. Give them a lifeline in the sequence diagram.
 
 ---
 
