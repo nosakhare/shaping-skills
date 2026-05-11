@@ -29,7 +29,7 @@ The code is ground truth. The breadboard may have drifted or been built from a c
 
 1. **Read the implementation code.** Find the relevant source files. Don't rely on the breadboard's current description of what the code does.
 2. **Inspect the seams.** Walk the code using the checklist in "Reading Seams from the Implementation" below — module boundaries, module-level definitions, function signatures, full call chains, decorators, state co-access.
-3. **Update the breadboard to match.** Add missing U#/N#/S# elements and Places. Fix wrong sequence diagram wiring. Remove stale elements. The goal is: the breadboard now accurately reflects the code's actual structure — even if that structure has problems.
+3. **Update the breadboard to match.** Add missing UI elements, Code elements, and Stores. Add missing Places. Fix wrong sequence diagram wiring. Remove stale elements. The goal is: the breadboard now accurately reflects the code's actual structure — even if that structure has problems.
 
 After Phase 1, the breadboard shows what IS, not what should be.
 
@@ -40,8 +40,8 @@ Phase 1 is preparation. Phase 2 is the point. Do not skip it.
 Now that the breadboard is accurate, inspect it for design problems. The code's names might be wrong. The split of responsibilities might not be ideal. The wiring might reveal unnecessary coupling or missing abstractions. Walk through each of these concrete checks:
 
 1. **Trace user stories through the wiring.** Does the path tell a coherent story? Can you explain every behavior without hidden steps?
-2. **Run the naming test on every Code element (N#).** For each N#: who is the caller, what is the step-level effect, can you name it with one plain verb? Flag any that resist naming. (See "The Naming Test" in Phase 2 details below.)
-3. **Check for hidden Stores.** For every module-level constant, config object, or template that a Code element reads: is it in the Stores table (S#)? If code reads it to produce effects, it's a Store — even if it's static. Ask: "what does this element need to know in order to do its job?" If the answer references something not in the breadboard, it's missing.
+2. **Run the naming test on every Code element.** For each Code element: who is the caller, what is the step-level effect, can you name it with one plain verb? Flag any that resist naming. (See "The Naming Test" in Phase 2 details below.)
+3. **Check for hidden Stores.** For every module-level constant, config object, or template that a Code element reads: is it in the Stores table? If code reads it to produce effects, it's a Store — even if it's static. Ask: "what does this element need to know in order to do its job?" If the answer references something not in the breadboard, it's missing.
 4. **Question the Places.** For each Place: does everything in it share a single responsibility? Do Stores and Code elements within it co-access each other and stay isolated from other Places? If a cluster of Code, Stores, and UI elements all serve one job (e.g., "turn natural language into structured commands"), they might deserve their own Place — even if the code doesn't separate them yet.
 5. **Check the problems table.** Unexplained behavior, incoherent Sequence Diagram wiring, naming resistance, etc.
 6. **Fix problems.** Split, merge, rename, or rewire behavior steps. Update the breadboard.
@@ -76,8 +76,8 @@ A breadboard designed from a conceptual shape ("user types, LLM processes, app e
 ### Updating the Breadboard
 
 After inspecting the code, update the breadboard to match what IS:
-- Add missing N# entries for functions the breadboard skipped
-- Add missing S# entries for constants and configuration the breadboard ignored
+- Add missing Code elements for functions the breadboard skipped
+- Add missing Stores for constants and configuration the breadboard ignored
 - Fix sequence diagram wiring to match actual call chains
 - Add or restructure Places based on state co-access
 
@@ -95,7 +95,7 @@ Take a user story from the requirements. Trace it through the See-Do tables and 
 
 Example: "User types a search query → results filter in real time → clicks a result → comes back and search is preserved."
 
-Trace: Search input (U1) → `activeQuery` stream (N1) → `performSearch` (N3) → results store (S2) → results list renders (U5) → Click row (U6) → **Letter Detail Place** (P2) → Back button (U11) → `initializeState` (N9) → results restored (U5).
+Trace: Search input → `activeQuery` subscription → `performSearch()` → `detailResult` store → Results list renders → Row click → **Letter Detail Place** → Back button → `initializeState()` → results restored.
 
 At each step, ask: does this logically lead to the next? Is anything missing?
 
@@ -104,10 +104,10 @@ At each step, ask: does this logically lead to the next? Is anything missing?
 | Problem | What you notice |
 |---------|-----------------|
 | **Unexplained behavior** | You know the system does something (transforms data, makes decisions) but the breadboard doesn't show how — the explanation is missing |
-| **Incoherent wiring** | A node writes to S1 AND triggers the thing that writes to S1 — redundant or contradictory |
+| **Incoherent wiring** | A Code element writes to a Store AND triggers the thing that writes to that Store — redundant or contradictory |
 | **Missing path** | The user story requires an effect, but no wiring path produces it |
-| **Diagram-only elements** | U#/N#/S# in the sequence diagram that aren't defined in the tables |
-| **Naming resistance** | You can't name a Code element (N#) with one plain verb (see Naming Test below) |
+| **Diagram-only elements** | Elements in the sequence diagram that aren't defined in the tables |
+| **Naming resistance** | You can't name a Code element with one plain verb (see Naming Test below) |
 | **Stale elements** | The breadboard shows something that no longer exists in the code — should have been caught in Phase 1 |
 | **Wrong causality** | The wiring shows A calls B, but the code shows C calls B — should have been caught in Phase 1 |
 
@@ -119,7 +119,7 @@ The first five are design problems — the code works but the design could be be
 
 The main tool for finding and fixing boundary problems in behavior flows.
 
-For each Code element (N#):
+For each Code element:
 
 1. **Who calls this?** Who triggers this action?
 2. **What does this action do on its own?** Not the downstream chain — just this action's direct effect.
@@ -179,10 +179,10 @@ The inability to find one natural verb was the signal that two distinct operatio
 When the naming test reveals a bundled step:
 
 1. **Split in the code first.** Extract distinct operations into separate functions. Even one-liners count if they represent a distinct effect.
-2. **Then update the Code table.** Add the new N# entries.
+2. **Then update the Code table.** Add the new entries.
 3. **Then update any sequence diagrams.**
 
-Never split only in a diagram (adding unnamed elements). If it's not a named function in the code and an N# in the diagram, it's not real.
+Never split only in a diagram (adding unnamed elements). If it's not a named function in the code and in the diagram, it's not real.
 
 ### Fixing Connections
 
@@ -201,7 +201,7 @@ After any changes:
 1. **Re-trace user stories.** Does each story produce its expected result through the UI, Code, and Stores tables and Sequence Diagrams?
 2. **Describe the flow in plain language.** Check every claim against the Sequence Diagram. If your description says "step 3 calls the API" but the sequence diagram doesn't show that, something was missed.
 3. **Check consistency:**
-   - Every U# that shows data has an incoming Feeds arrow
-   - Every N# appears in at least one Sequence Diagram arrow
-   - Every S# has something feeding from it
+   - Every UI element that shows data has an incoming Feeds arrow
+   - Every Code element appears in at least one Sequence Diagram arrow
+   - Every Store has something feeding from it
    - Every arrow in the Sequence Diagram corresponds to something real in the code
