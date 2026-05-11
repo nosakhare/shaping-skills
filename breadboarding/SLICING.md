@@ -44,7 +44,7 @@ Aim for 9 slices or fewer.
 
 1. **Find the smallest demo-able increment.** Ask: "What's the least I can build that shows the core thing working?" Usually this is the core data fetch plus basic rendering. This becomes `V1`.
 2. **Add capabilities as additional slices.** Each slice should demonstrate one mechanism working, such as search, pagination, or URL state.
-3. **Assign elements to slices.** Go through every U#, N#, and S# and mark which slice it first enters the flow in.
+3. **Assign elements to slices.** Go through every UI element, Code element, and Store and mark which slice it first enters the flow in.
 4. **Write a demo statement for each slice.** Each slice needs a concrete, one-sentence demo such as "Type 'dharma', results filter live."
 5. **Draw a per-slice sequence diagram.** Show the complete sequence diagram in every slice diagram, but style elements by scope:
 
@@ -56,9 +56,9 @@ Aim for 9 slices or fewer.
 
 ### Slice Summary Format
 
-| # | Slice | Mechanism | Actions in Flow | Demo |
-|---|---|---|---|---|
-| V1 | Widget with real data | F1, F4, F6 | A3-A11 | "Widget shows letters from API" |
-| V2 | Search works | F3 | U1, N1, N2 | "Type to filter results" |
-| V3 | Infinite scroll | F5 | A12, A13, A14 | "Scroll down, more load" |
-| V4 | URL state | F2 | A15, A16, A17 | "Refresh preserves search" |
+| Slice | Mechanism | Elements in Flow | Demo |
+|---|---|---|---|
+| V1 Widget with real data | F1, F4, F6 | performSearch(), rawSearch(), loading, Results list | "Widget shows letters from API" |
+| V2 Search works | F3 | Search input, activeQuery.next(), activeQuery subscription | "Type to filter results" |
+| V3 Infinite scroll | F5 | Scroll, appendNextPage(), sendMessage() | "Scroll down, more load" |
+| V4 URL state | F2 | Back button, URL ?q=, initializeState(), navigate() | "Refresh preserves search" |

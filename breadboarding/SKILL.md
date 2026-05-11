@@ -8,9 +8,9 @@ description: Maps a description of how a system works, or should work, into a Pl
 Breadboarding maps out a system — either one that already exists or one you're designing — by capturing four things:
 
 - **Places** — the distinct screens or boundaries the user moves between (a page, a modal, the backend)
-- **UI (U#)** — what the user sees or interacts with: buttons, inputs, displays, spinners
-- **Code (N#)** — functions and handlers you can call or observe
-- **Stores (S#)** — state that persists and is read and written
+- **UI** — what the user sees or interacts with: buttons, inputs, displays, spinners
+- **Code** — functions and handlers you can call or observe
+- **Stores** — state that persists and is read and written
 - **Flows** — how those elements connect, shown as a state diagram (navigation) and a sequence diagram (temporal flow)
 
 ---
@@ -67,7 +67,7 @@ Sometimes breadboards are sketched on a whiteboard. The same concepts apply — 
 | Large box around multiple stacks | A system or responsibility boundary |
 | Freeform text | Notes, open questions, or context |
 
-**Converting to the standard format:** Map each stack to its Place, list UI/Code/Stores in their respective tables, and turn arrows into sequence diagram messages labelled with their IDs.
+**Converting to the standard format:** Map each stack to its Place, list UI/Code/Stores in their respective tables, and turn arrows into sequence diagram messages labelled with the element names.
 
 ---
 
@@ -113,8 +113,8 @@ Ask yourself: did *everything* change, or just a small part while the rest staye
 If a "mode" (like Edit Mode) transforms the entire screen, treat it as a separate Place:
 
 ```
-P1: CMS Page (Read Mode)
-P2: CMS Page (Edit Mode)
+CMS Page (Read Mode)
+CMS Page (Edit Mode)
 ```
 
 The flag that switches between modes is just a navigation mechanism — don't list it as a Store inside either Place.
@@ -131,37 +131,37 @@ If the answer to #3 is "everything changes" or "I can't interact with what's beh
 
 | Pattern | When to Use |
 |---|---|
-| `P#: Page Name` | A standard page or route |
-| `P#: Page Name (Mode)` | A mode-based version of a page |
-| `P#: Modal Name` | A modal dialog |
-| `P#: Backend` | The API or database layer |
+| `Page Name` | A standard page or route |
+| `Page Name (Mode)` | A mode-based version of a page |
+| `Modal Name` | A modal dialog |
+| `Backend` | The API or database layer |
 
-When spanning multiple systems: `P1: Checkout Page (frontend)`, `P4: Payment API (backend)`.
+When spanning multiple systems: `Checkout Page (frontend)`, `Payment API (backend)`.
 
 #### Sub-Places
 
-A **sub-place** is a defined section within a Place — useful when a Place has multiple distinct widgets or areas. Use hierarchical IDs: `P2.1`, `P2.2`, etc.
+A **sub-place** is a defined section within a Place — useful when a Place has multiple distinct widgets or areas. Name each sub-place descriptively and nest the name under the parent Place.
 
 When zooming in on one sub-place, add a placeholder to show there's more on the page:
 ```
 [... other page content ...]
 ```
 
-### UI (U#)
+### UI
 
-**UI elements** are what the user sees or interacts with. Every UI element gets a `U#` ID.
+**UI elements** are what the user sees or interacts with.
 
 Examples: buttons, inputs, text displays, spinners, scroll areas, result rows, notification banners.
 
-### Code (N#)
+### Code
 
-**Code elements** are functions and handlers you can call or observe. Every code element gets an `N#` ID.
+**Code elements** are functions and handlers you can call or observe.
 
 Examples: event handlers, API calls, subscriptions, framework hooks, async tasks.
 
-### Stores (S#)
+### Stores
 
-**Stores** are state that persists and is read and written. Every store gets an `S#` ID.
+**Stores** are state that persists and is read and written.
 
 Examples: observables, arrays, booleans, browser URL, localStorage, clipboard.
 
@@ -186,53 +186,53 @@ Every breadboard produces exactly these four things, preceded by a **Legend**.
 
 Include this at the top of every breadboard document so it is self-contained:
 
-| Prefix | Type | Definition |
-|---|---|---|
-| P# | Place | A bounded context of interaction — where you are and what you can do |
-| U# | UI | What the user sees or interacts with |
-| N# | Code | Functions and handlers you can call or observe |
-| S# | Store | State that persists and is read and written |
+| Type | Definition |
+|---|---|
+| Place | A bounded context of interaction — where you are and what you can do |
+| UI | What the user sees or interacts with |
+| Code | Functions and handlers you can call or observe |
+| Store | State that persists and is read and written |
 
 ### 1. Places List
 
-A simple numbered table of every Place in the workflow.
+A simple table of every Place in the workflow.
 
-| # | Place | Description |
-|---|---|---|
-| P1 | Search Page | Main search interface |
-| P2 | Detail Page | Individual result view |
-| P3 | Backend | Search service and data layer |
+| Place | Description |
+|---|---|
+| Search Page | Main search interface |
+| Detail Page | Individual result view |
+| Backend | Search service and data layer |
 
 ### 2. UI Table
 
 Every element the user sees or interacts with, defined once.
 
-| # | Name | Description | Triggers | Feeds |
-|---|---|---|---|---|
-| U1 | Search input | Text field where the user types a query | N1 | |
-| U2 | Loading spinner | Renders while S1 is true | | |
-| U3 | Results list | Renders each hit from S2 | | |
-| U4 | Result row | Click navigates to P2 | P2 | |
+| Name | Description | Triggers | Feeds |
+|---|---|---|---|
+| Search input | Text field where the user types a query | `activeQuery.next()` | |
+| Loading spinner | Renders while `loading` is true | | |
+| Results list | Renders each hit from `results` | | |
+| Result row | Click navigates to Detail Page | Detail Page | |
 
 ### 3. Code Table
 
 Every function, subscription, and handler, defined once.
 
-| # | Name | Description | Triggers | Feeds |
-|---|---|---|---|---|
-| N1 | `activeQuery.next()` | Pushes query into the observable stream | N2 | |
-| N2 | `activeQuery` subscription | Observes stream with 90ms debounce; fires when ≥ 3 chars | N3 | |
-| N3 | `performSearch()` | Sets loading state, calls search service | N4, S1, S2 | |
-| N4 | `rawSearch()` | Queries the search index | | S2 |
+| Name | Description | Triggers | Feeds |
+|---|---|---|---|
+| `activeQuery.next()` | Pushes query into the observable stream | `activeQuery` subscription | |
+| `activeQuery` subscription | Observes stream with 90ms debounce; fires when ≥ 3 chars | `performSearch()` | |
+| `performSearch()` | Sets loading state, calls search service | `rawSearch()`, `loading`, `results` | |
+| `rawSearch()` | Queries the search index | | `results` |
 
 ### 4. Stores Table
 
 Every piece of state that persists and is read and written, defined once.
 
-| # | Name | Description | Written by | Feeds |
-|---|---|---|---|---|
-| S1 | `loading` | Boolean loading state | N3 | U2 |
-| S2 | `results` | Array of search result hits | N3, N4 | U3 |
+| Name | Description | Written by | Feeds |
+|---|---|---|---|
+| `loading` | Boolean loading state | `performSearch()` | Loading spinner |
+| `results` | Array of search result hits | `performSearch()`, `rawSearch()` | Results list |
 
 ### 5. State Diagram
 
@@ -240,32 +240,32 @@ A Mermaid `stateDiagram-v2` showing Places as states and navigation as labelled 
 
 ```mermaid
 stateDiagram-v2
-    [*] --> P1
-    P1: P1 Search Page
-    P2: P2 Detail Page
+    [*] --> SearchPage
+    SearchPage: Search Page
+    DetailPage: Detail Page
 
-    P1 --> P2 : U4 result row click
-    P2 --> P1 : U7 back button
+    SearchPage --> DetailPage : Result row click
+    DetailPage --> SearchPage : Back button
 ```
 
 ### 6. Sequence Diagram
 
-A Mermaid sequence diagram with one lifeline per Place. Arrows are labelled with element IDs. Solid arrows show Triggers →. Dashed arrows show Feeds ←.
+A Mermaid sequence diagram with one lifeline per Place. Arrows are labelled with element names. Solid arrows show Triggers →. Dashed arrows show Feeds ←.
 
 ```mermaid
 sequenceDiagram
-    participant P1 as P1: Search Page
-    participant P3 as P3: Backend
+    participant SP as Search Page
+    participant BE as Backend
 
-    P1->>P1: U1 search input (type)
-    P1->>P1: N1 activeQuery.next()
-    P1->>P1: N2 subscription fires
-    P1->>P3: N3 performSearch() → N4 rawSearch()
-    P3-->>P1: N4 results returned
-    P1->>P1: S1 loading store update
-    P1->>P1: S2 results store update
-    P1-->>P1: U2 loading spinner renders
-    P1-->>P1: U3 results list renders
+    SP->>SP: Search input (type)
+    SP->>SP: activeQuery.next()
+    SP->>SP: activeQuery subscription fires
+    SP->>BE: performSearch() → rawSearch()
+    BE-->>SP: results returned
+    SP->>SP: loading store update
+    SP->>SP: results store update
+    SP-->>SP: Loading spinner renders
+    SP-->>SP: Results list renders
 ```
 
 **Line conventions:**
@@ -288,16 +288,16 @@ Walk through the user journey and list every distinct Place — every screen, mo
 Starting from the entry point (a route, an API endpoint), follow the code to find every component touched by that flow.
 
 **Step 3: Fill the UI, Code, and Stores tables.**
-For each component, identify every button, input, display, function, subscription, and store involved. Assign U#, N#, or S# IDs. Use real names — if you write "DATABASE," stop and find the actual method (`userRepo.save()`).
+For each component, identify every button, input, display, function, subscription, and store involved. Use real names — if you write "DATABASE," stop and find the actual method (`userRepo.save()`).
 
 **Step 4: Fill in Triggers and Feeds for each row.**
-For each element, note what it triggers next and what it feeds data to. Use the ID (e.g. `N3`, `S1`) not prose descriptions.
+For each element, note what it triggers next and what it feeds data to. Use element names, not shorthand codes.
 
 **Step 5: Draw a state diagram to show navigation.**
-Place each user-facing Place as a state node. Draw transitions labelled with the U# that causes navigation.
+Place each user-facing Place as a state node. Draw transitions labelled with the UI element that causes navigation.
 
 **Step 6: Draw a sequence diagram to show flow.**
-Place each Place as a lifeline. Draw solid arrows for Triggers → and dashed arrows for Feeds ←, labelled with element IDs. Trace the full journey from the first user interaction to the final visible result.
+Place each Place as a lifeline. Draw solid arrows for Triggers → and dashed arrows for Feeds ←, labelled with element names. Trace the full journey from the first user interaction to the final visible result.
 
 **Step 7: Check against the code.**
 Read the code again. Confirm every element exists and both diagrams match reality.
@@ -310,10 +310,10 @@ Read the code again. Confirm every element exists and both diagrams match realit
 For each part in your design, decide which Place it lives in — an existing one being modified, or a new one being created.
 
 **Step 2: Fill the UI, Code, and Stores tables.**
-For each part, identify the UI elements the user will see, the Code elements that implement it, and the Stores that hold state. Assign IDs.
+For each part, identify the UI elements the user will see, the Code elements that implement it, and the Stores that hold state.
 
 **Step 3: Make sure every UI element that shows data has a Store or Code element feeding it.**
-For each U# that displays data, check: which N# or S# provides that data? If none exists, add it.
+For each UI element that displays data, check: which Code element or Store provides that data? If none exists, add it.
 
 **Step 4: Draw a state diagram.**
 Check that every Place is reachable from the entry point. Every terminal Place (no outgoing transitions) should be intentional.
@@ -325,12 +325,12 @@ Trace the intended behaviour from start to finish. Use solid arrows for Triggers
 Add the existing elements the new ones must connect to in the tables. Show those connections in the sequence diagram.
 
 **Step 7: Check for completeness.**
-- Every U# that shows data should have an N# or S# feeding it
-- Every N# should appear in at least one arrow in the sequence diagram
-- Every S# should have something feeding from it (a U# reading it)
+- Every UI element that shows data should have a Code element or Store feeding it
+- Every Code element should appear in at least one arrow in the sequence diagram
+- Every Store should have something feeding from it (a UI element reading it)
 - Every Place should be reachable in the state diagram
 
-**Step 8: Treat everything the user sees as a U#.**
+**Step 8: Treat everything the user sees as a UI element.**
 Emails, notifications, and any other visible output are UI elements and need a Code or Store element feeding them.
 
 ---
@@ -343,7 +343,7 @@ When tracing a flow backwards, scan the Triggers and Feeds columns for all eleme
 
 ### Every name must be real (when mapping existing code)
 
-Never invent abstractions. Every N# name must point to something real in the codebase.
+Never invent abstractions. Every Code element name must point to something real in the codebase.
 
 ### Not everything qualifies
 
@@ -356,35 +356,35 @@ Each type has a threshold:
 | Navigation mechanisms | `modalService.open()` | Just the "how" of getting to a Place — draw the arrow directly to the Place |
 
 ```
-❌ N8 → N22 → P3     (N22 is modalService.open — just a mechanism)
-✅ N8 → P3           (code navigates to place)
+❌ handleSubmit() → modalService.open() → Confirm Dialog
+✅ handleSubmit() → Confirm Dialog
 
-❌ N6 → N20 → S2     (N20 is a data transform — internal to N6)
-✅ N6 → S2           (code writes to store)
+❌ processData() → letterDataTransform() → results
+✅ processData() → results
 ```
 
-### Every U# that shows data needs a source
+### Every UI element that shows data needs a source
 
 ```
-❌ U3: results list — no incoming Feeds arrow
-✅ S2 (results store) feeds U3
-✅ N4 (query result) feeds U3
+❌ Results list — no incoming Feeds arrow
+✅ results store feeds Results list
+✅ rawSearch() feeds Results list
 ```
 
 If a display has no data source, either the source is missing or the display isn't real.
 
-### Every N# must appear in the sequence diagram
+### Every Code element must appear in the sequence diagram
 
 - Functions → should have at least one outgoing Triggers → arrow
 - Queries → should have at least one incoming Feeds ← arrow
 
-### Side effects need their own S# entry
+### Side effects need their own Store entry
 
 If a Code element has side effects outside the system boundary (browser URL, localStorage, external API, analytics), add a Store for that external state and draw an arrow to it:
 
 ```
-❌ N41: updateUrl() — no outgoing arrow
-✅ N41: updateUrl() → S5 (Browser URL store)
+❌ updateUrl() — no outgoing arrow
+✅ updateUrl() → Browser URL store
 ```
 
 Common external state to model as Stores:
